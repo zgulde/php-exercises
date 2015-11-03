@@ -6,7 +6,6 @@
 </head>
 <body>
 <?php
-
 echo PHP_EOL;
 
 $x = 0;

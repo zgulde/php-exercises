@@ -9,7 +9,7 @@ $z = 10;
 echo "2.\n";
 var_dump( $x < $y && $y < $z );
 echo "3.\n";
-var_dump( $x > $y && $y < $z );
+var_dump( $x > $y && < $z );
 echo "4.\n";
 var_dump( $x > $y || $y < $z );
 echo "5.\n";
