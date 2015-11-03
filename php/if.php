@@ -29,7 +29,8 @@ echo PHP_EOL;
      echo "$b is equal in type and value $c\n";
  } elseif ($b == $c) {
      echo "$b is equal in type to $c\n";
- } elseif ($b !== $c) {
+ }
+ if ($b !== $c) {
      echo "$b is not identical to $c\n";
  } elseif ($b != $c) {
      echo "$b is not equal to $c\n";
