@@ -1,14 +1,19 @@
 <?php
 
-var_dump('test' == 'test');
+echo PHP_EOL;
 
-var_dump('test' == 'Test');
+$x = 0;
+$y = 5;
+$z = 10;
 
-var_dump(100 > 5);
-
-var_dump('25' === 25);
-
-var_dump('25' !== 25);
+echo "2.\n";
+var_dump( $x < $y && $y < $z );
+echo "3.\n";
+var_dump( $x > $y && $y < $z );
+echo "4.\n";
+var_dump( $x > $y || $y < $z );
+echo "5.\n";
+var_dump( $x > $y || !($y < $z) );
 
 echo PHP_EOL;
 
