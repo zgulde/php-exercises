@@ -12,6 +12,7 @@ $max = 100;
 		fwrite(STDOUT, "Expected: int \$max > 0\n");
 		fwrite(STDOUT, "Starting game with default values...\n\n");
 	}
+
 	if($argc === 3 && ( (int) $argv[1] < (int) $argv[2]) ){
 		$min = (int) $argv[1];
 		$max = (int) $argv[2];
@@ -20,6 +21,7 @@ $max = 100;
 		fwrite(STDOUT,"Expected: int \$min < int \$max\n");
 		fwrite(STDOUT, "Starting game with default values...\n\n");
 	}
+
 	if($argc > 3){
 		fwrite(STDOUT, "Error: unexpected number of arguments\n");
 		fwrite(STDOUT, "Starting game with default values...\n\n");
@@ -32,7 +34,7 @@ fwrite(STDOUT,"~~~~~~~~ High-Low Game ~~~~~~~~\n");
 fwrite(STDOUT,"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
 
 while($user_guess !== $the_number){
-	$user_guess = $min - 1;
+	$user_guess = NULL;
 
 	while( ($user_guess < $min) || ($user_guess > $max) ){
 		fwrite(STDOUT,"Guess (between $min and $max) : ");
@@ -50,7 +52,6 @@ while($user_guess !== $the_number){
 	}
 
 	fwrite(STDOUT,"===============================\n");
-
 }
 
 echo PHP_EOL;
