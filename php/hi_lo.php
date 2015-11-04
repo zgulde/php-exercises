@@ -3,13 +3,24 @@ echo PHP_EOL;
 $user_guess = 0;
 $min = 1;
 $max = 100;
-if( ($argc === 2) && ( (int) $argv[1] > 0) ){
-	$max = (int) $argv[1];
-}
-if($argc === 3 && ( (int) $argv[1] < (int) $argv[2]) ){
-	$min = (int) $argv[1];
-	$max = (int) $argv[2];
-}
+
+//validate and set command line inputs
+	if( ($argc === 2) && ( (int) $argv[1] > 0) ){
+		$max = (int) $argv[1];
+	} elseif ($argc === 2) {
+		fwrite(STDOUT, "Error: invalid argument \"\$min\"\n");
+		fwrite(STDOUT, "Expected: int \$min > 0\n");
+		fwrite(STDOUT, "Starting game with default values...\n\n");
+	}
+	if($argc === 3 && ( (int) $argv[1] < (int) $argv[2]) ){
+		$min = (int) $argv[1];
+		$max = (int) $argv[2];
+	} elseif ($argc === 3) {
+		fwrite(STDOUT,"Error: invalid arguments \"\$min\", \"\$max\"\n");
+		fwrite(STDOUT,"Expected: int \$min < int \$max\n");
+		fwrite(STDOUT, "Starting game with default values...\n\n");
+	}
+
 $the_number = mt_rand($min, $max);
 
 fwrite(STDOUT,"~~~~~~~~ High-Low Game ~~~~~~~~\n\n");
