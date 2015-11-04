@@ -20,10 +20,16 @@ $max = 100;
 		fwrite(STDOUT,"Expected: int \$min < int \$max\n");
 		fwrite(STDOUT, "Starting game with default values...\n\n");
 	}
+	if($argc > 3){
+		fwrite(STDOUT, "Error: unexpected number of arguments\n");
+		fwrite(STDOUT, "Starting game with default values...\n\n");
+	}
 
 $the_number = mt_rand($min, $max);
 
-fwrite(STDOUT,"~~~~~~~~ High-Low Game ~~~~~~~~\n\n");
+fwrite(STDOUT,"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+fwrite(STDOUT,"~~~~~~~~ High-Low Game ~~~~~~~~\n");
+fwrite(STDOUT,"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
 
 while($user_guess !== $the_number){
 	$user_guess = $min - 1;
