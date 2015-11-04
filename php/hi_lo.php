@@ -16,7 +16,7 @@ $max = 100;
 		$min = (int) $argv[1];
 		$max = (int) $argv[2];
 	} elseif ($argc === 3) {
-		fwrite(STDOUT,"Error: invalid arguments \"\$min\", \"\$max\"\n");
+		fwrite(STDOUT,"Error: invalid arguments \"\$min\" \"\$max\"\n");
 		fwrite(STDOUT,"Expected: int \$min < int \$max\n");
 		fwrite(STDOUT, "Starting game with default values...\n\n");
 	}
