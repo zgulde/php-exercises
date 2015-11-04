@@ -4,7 +4,7 @@ $user_guess = 0;
 $min = 1;
 $max = 100;
 
-//validate and set command line inputs
+//validate and set $min and $max from command line inputs
 	if( ($argc === 2) && ( (int) $argv[1] > 0) ){
 		$max = (int) $argv[1];
 	} elseif ($argc === 2) {
