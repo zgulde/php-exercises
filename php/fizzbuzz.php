@@ -1,10 +1,7 @@
 <?php
 echo PHP_EOL;
 
-$i = 0;
-$message = '';
-while( $i < 100 ){
-	$i++;
+for($i = 1; $i <= 100; $i++){
 	$message = '';
 
 	if ( ($i % 3) == 0)	$message .= 'fizz';
