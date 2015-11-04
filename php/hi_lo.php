@@ -8,8 +8,8 @@ $max = 100;
 	if( ($argc === 2) && ( (int) $argv[1] > 0) ){
 		$max = (int) $argv[1];
 	} elseif ($argc === 2) {
-		fwrite(STDOUT, "Error: invalid argument \"\$min\"\n");
-		fwrite(STDOUT, "Expected: int \$min > 0\n");
+		fwrite(STDOUT, "Error: invalid argument \"\$max\"\n");
+		fwrite(STDOUT, "Expected: int \$max > 0\n");
 		fwrite(STDOUT, "Starting game with default values...\n\n");
 	}
 	if($argc === 3 && ( (int) $argv[1] < (int) $argv[2]) ){
