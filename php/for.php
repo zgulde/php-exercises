@@ -1,9 +1,31 @@
 <?php
-echo PHP_EOL;
 
 $start_number = 0;
 $end_number = 0;
 $increment = 0;
+
+if ($argc === 2 && $argv[1] === 'help'){
+	echo " ____________________________________________________________________ \n";
+	echo "|                                                                    |\n";
+	echo "|---INFO ------------------------------------------------------------|\n";
+	echo "| This is a command line tool to illustrate the parameters of a for  |\n";
+	echo "| loop. Either you can pass it three arguments that correspond to the|\n";
+	echo "| parameters of a for loop in the command line or just call the file |\n";
+	echo "| and it will prompt you for the parameters.                         |\n";
+	echo "|---SYNTAX ----------------------------------------------------------|\n";
+	echo "| /pathtofile \$ php for.php \"start_number\" \"end_number\" \"incrementor\"|\n";
+	echo "|---USING -----------------------------------------------------------|\n";
+	echo "| 1) All numbers must be integers.                                   |\n";
+	echo "| 2) The starting number can be anything you like, including         |\n";
+	echo "|    negative numbers.                                               |\n";
+	echo "| 3) The ending number must be greater than the starting number.     |\n";
+	echo "| 4) The incrementor repeatedly added to the starting number must    |\n";
+	echo "|    eventually get the starting number to the end number i.e. the   |\n";
+	echo "|    end number cannot be skipped.                                   |\n";
+	echo "|____________________________________________________________________|\n";
+	echo PHP_EOL;
+	exit(0);
+}
 
 if ($argc === 4) {
 	$start_number = trim($argv[1]);
