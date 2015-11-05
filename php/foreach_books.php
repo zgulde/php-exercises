@@ -23,10 +23,14 @@ $books = array(
     )
 );
 
+echo "\nOnly showing books written after 1950...\n";
+
 foreach($books as $title => $book){
-	echo "\nTitle: $title\n";
-	foreach($book as $info => $value){
-		echo "    $info: $value\n";
+	if ($book['published'] > 1950) {
+		echo "\nTitle: $title\n";
+		foreach($book as $info => $value){
+			echo "    $info: $value\n";
+		}
 	}
 }
 
