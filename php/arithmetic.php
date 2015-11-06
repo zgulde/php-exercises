@@ -59,6 +59,7 @@ function modulus($a, $b)
         return $a;
     }
     return modulus(subtract($a, $b), $b);
+    // modulus($a-$b, $b)
 }
 
 function power($a, $b)
