@@ -11,7 +11,7 @@ function inspect($x){
         case 'boolean':
             return 'The boolean is ' . ( $x ? 'true' : 'false' );
         case 'array':
-            return 'The value is ' . (($x == []) ? 'an empty array' : 'an array');
+            return 'The value is an ' . (($x == []) ? 'empty array' : 'array');
         case 'NULL':
             return 'The value is NULL';
         default:

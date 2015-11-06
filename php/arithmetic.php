@@ -1,9 +1,9 @@
 <?php
 
-ini_set('xdebug.max_nesting_level', '');
+// ini_set('xdebug.max_nesting_level', '');
 
-$a = 20;
-$b = 3;
+$a = 2;
+$b = 7;
 
 function add($a, $b)
 {
@@ -47,6 +47,15 @@ function divide($a, $b)
     // 1 + divide($a - $b, $b)
 }
 
+function power($a, $b)
+{
+    if ($b == 0) {
+        return 1;
+    }
+    return multiply($a, power($a, subtract($b, 1) ) );
+    // $a * power($a, $b-1)
+}
+
 function modulus($a, $b)
 {
     if ($b === 1) {
@@ -60,15 +69,6 @@ function modulus($a, $b)
     }
     return modulus(subtract($a, $b), $b);
     // modulus($a-$b, $b)
-}
-
-function power($a, $b)
-{
-    if ($b == 0) {
-        return 1;
-    }
-    return multiply($a, power($a, subtract($b, 1) ) );
-    // $a * power($a, $b-1)
 }
 
 echo "$a plus $b equals " . add($a,$b) . PHP_EOL;
