@@ -3,6 +3,7 @@
 function format_phone_number($phone_number)
 {
     $num_digits = strlen($phone_number);
+
     if($num_digits === 10){
         return substr($phone_number,0,3) . '-' . substr($phone_number,3,3) . '-' . substr($phone_number, 6);
     } elseif ($num_digits === 7) {
@@ -15,7 +16,7 @@ function format_phone_number($phone_number)
 }
 
 
-function parseContacts($filename)
+function parse_contacts($filename)
 {
     $handle = fopen($filename, 'r');
     $contents = trim(fread($handle, filesize($filename) ) );
@@ -25,13 +26,14 @@ function parseContacts($filename)
 
     foreach ($contact_list as &$contact) {
         $contact_info = explode('|', $contact);
-        $contact = [];  
-        $contact['name'] = $contact_info[0];
-        $contact['number'] = format_phone_number($contact_info[1]);
+        $contact = [  
+            'name' => $contact_info[0],
+            'number' => format_phone_number($contact_info[1])
+        ];
     }
 
     return $contact_list;
 }
 
-var_dump(parseContacts('contacts.txt'));
+var_dump(parse_contacts('contacts.txt'));
 
