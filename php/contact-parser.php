@@ -1,6 +1,5 @@
 <?php
 
-//some coments
 function format_phone_number($phone_number)
 {
     $num_digits = strlen($phone_number);
@@ -35,3 +34,4 @@ function parseContacts($filename)
 }
 
 var_dump(parseContacts('contacts.txt'));
+
