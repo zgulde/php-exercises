@@ -29,31 +29,64 @@ function hasCSVs($string)
     return false;
 }
 
+//given a file with newlines, returns an array of lines that have
+//comma separated values with at least one csv being a number
+function getCSVLines($filename)
+{
+    $handle = fopen($filename, 'r');
+    $contents = trim(fread($handle, filesize($filename) ) );
+    fclose($handle);
+
+    $array = explode("\n", $contents);
+    $parsedArray = [];
+
+    foreach ($array as $line) {
+        if (hasCSVs($line)){
+            $parsedArray[] = $line;
+        }
+    }
+    return $parsedArray;
+}
+
+function formatForTableColumn($string, $numTabs = 1)
+{
+    $tabWidth = 8;
+    $tabsToInsert = ceil( ( ($numTabs * $tabWidth) - strlen($string) ) / $tabWidth);
+    for ($i = 0; $i < $tabsToInsert; $i++){
+        $string .= "\t";
+    }
+    return $string;
+}
 
 $filename = 'data/sales.txt';
-$handle = fopen($filename, 'r');
-$contents = trim(fread($handle, filesize($filename) ) );
-fclose($handle);
+$salesReport = getCSVLines($filename);
+$formattedReport = [];
 
-$contents = explode("\n", $contents);
-$csvLines = [];
-
-//get the lines that have comma separated values
-foreach ($contents as $line) {
-    if (strpos($line, ', ') !== false) {
-        $csvLines[] = $line;
-    }
-}
-
-foreach ($csvLines as $entry) {
-    $tmp = explode(', ', $entry);
-    $entry = [
-        'employeeNumber' => $tmp[0],
-        'fullName' => $tmp[1] . $tmp[2],
-        'salesUnits' => $tmp[3]
+foreach ($salesReport as $dataEntry) {
+    $eachCSV = explode(', ', $dataEntry);
+    $formattedLine = [
+        'employeeNumber' => $eachCSV[0],
+        'fullName' => $eachCSV[1] . ' ' . $eachCSV[2],
+        'salesUnits' => $eachCSV[3]
     ];
-
-    echo "";
+    $formattedReport[] = $formattedLine;
 }
+
+echo formatForTableColumn('| Units');
+echo formatForTableColumn('| Full Name', 5);
+echo formatForTableColumn('| Employee Number');
+echo PHP_EOL;
+echo '--------------------------------------------------------';
+echo PHP_EOL;
+foreach ($formattedReport as $line) {
+    echo formatForTableColumn('| ' . $line['salesUnits']);
+    echo formatForTableColumn('| ' . $line['fullName'], 5);
+    echo formatForTableColumn('| ' . $line['employeeNumber']);
+    echo PHP_EOL;
+}
+
+
+
+
 
 echo PHP_EOL;
