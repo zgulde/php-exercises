@@ -1,19 +1,9 @@
 <?php
 echo PHP_EOL;
 
-// Output should include:
-// - total number of employees
-// - total number of units sold
-// - avg units sold per employee
-// - Then output should share employee production, ordered from highest to lowest # of units
-// * Units   |     Full Name       |   Employee Number
-// * 5             Bob Boberson        2
+define("TAB_WIDTH", 8);
 
-// tab = 8 chars
-
-//
-
-//returns true is the line containes ', ' and at least one of the 
+//returns true if the string containes ', ' and at least one of the 
 //csvs is numeric
 function hasCSVs($string)
 {
@@ -34,6 +24,10 @@ function hasCSVs($string)
 function getCSVLines($filename)
 {
     $handle = fopen($filename, 'r');
+    if ($handle === false) {
+        echo "Error: cant find $filename\n";
+        die();
+    }
     $contents = trim(fread($handle, filesize($filename) ) );
     fclose($handle);
 
@@ -48,42 +42,101 @@ function getCSVLines($filename)
     return $parsedArray;
 }
 
+//given a string and the width of the column as $numTabs, appends tabs to the 
+//string such that the
 function formatForTableColumn($string, $numTabs = 1)
 {
-    $tabWidth = 8;
-    $tabsToInsert = ceil( ( ($numTabs * $tabWidth) - strlen($string) ) / $tabWidth);
+    $tabsToInsert = ceil( ( ($numTabs * TAB_WIDTH) - strlen($string) ) / TAB_WIDTH);
     for ($i = 0; $i < $tabsToInsert; $i++){
         $string .= "\t";
     }
     return $string;
 }
 
-$filename = 'data/sales.txt';
+//given a two dimensional array where the elements are arrays with identical
+//keys, returns an array of the proper tab size for displaying each key value as
+//a table column
+function getMaxTabSize($twoDArray)
+{
+    $biggestString = [];
+    $tabSizes = [];
+
+    //find the longest string for each key in the inner arrays
+    foreach ($twoDArray as $innerArray) {
+        foreach ($innerArray as $key => $string) {
+            if (strlen($string) > $biggestString[$key]) {
+                $biggestString[$key] = strlen($string);
+            }
+        }    
+    }
+    //calculate tab size based on string length
+    foreach ($biggestString as $key => $size) {
+        $tabSizes[$key] = ceil($size / TAB_WIDTH);
+    }
+    return $tabSizes;
+}
+
+//takes a tabSizes array and calculates the size of the line needed to separate
+//the table head from the body and returns that line
+function getDashedLine($tabSizes)
+{
+    $numOfDashes = 0;
+    $dashedLine = '';
+    foreach ($tabSizes as $size) {
+        $numOfDashes += $size * TAB_WIDTH;
+    }
+    for ($i=0; $i < $numOfDashes; $i++) { 
+        $dashedLine .= '-';
+    }
+    return $dashedLine;
+}
+
+//displays a 2d table with elements that are arrays with identical keys using
+//the keys as the table head
+function displayAsTable($formatted2dArray)
+{
+    //append |s
+    $piped2dArray = [];
+    foreach ($formatted2dArray as $innerArray) {
+        $pipedInnerArray = [];
+        foreach ($innerArray as $key => $value) {
+            $pipedInnerArray[$key] = '| ' . $value;
+        }
+        $piped2dArray[] = $pipedInnerArray;
+    }
+
+    $tabSizes = getMaxTabSize($piped2dArray);
+    //the keys of tabSizes are also the keys for each table line
+    foreach ($tabSizes as $key => $size) {
+        echo formatForTableColumn('| ' . $key, $size);
+    }
+    echo PHP_EOL;
+
+    echo getDashedLine($tabSizes) . PHP_EOL;
+
+    foreach ($piped2dArray as $line) {
+        foreach ($line as $key => $column) {
+            echo formatForTableColumn($column, $tabSizes[$key]);
+        }
+        echo PHP_EOL;
+    }
+}
+
+$filename = $argv[1];
 $salesReport = getCSVLines($filename);
-$formattedReport = [];
 
 foreach ($salesReport as $dataEntry) {
     $eachCSV = explode(', ', $dataEntry);
     $formattedLine = [
-        'employeeNumber' => $eachCSV[0],
-        'fullName' => $eachCSV[1] . ' ' . $eachCSV[2],
-        'salesUnits' => $eachCSV[3]
+        'Units' => $eachCSV[3],
+        'Full Name' => $eachCSV[1] . ' ' . $eachCSV[2],
+        'Employee Number' => $eachCSV[0]
     ];
     $formattedReport[] = $formattedLine;
 }
 
-echo formatForTableColumn('| Units');
-echo formatForTableColumn('| Full Name', 5);
-echo formatForTableColumn('| Employee Number');
-echo PHP_EOL;
-echo '--------------------------------------------------------';
-echo PHP_EOL;
-foreach ($formattedReport as $line) {
-    echo formatForTableColumn('| ' . $line['salesUnits']);
-    echo formatForTableColumn('| ' . $line['fullName'], 5);
-    echo formatForTableColumn('| ' . $line['employeeNumber']);
-    echo PHP_EOL;
-}
+displayAsTable($formattedReport);
+
 
 
 
