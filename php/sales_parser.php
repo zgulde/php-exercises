@@ -96,10 +96,17 @@ function getDashedLine($tabSizes)
     return $dashedLine;
 }
 
-//displays a 2d table with elements that are arrays with identical keys using
-//the keys as the table head
-function displayAsTable($formatted2dArray)
+//writes a 2d table with elements that are arrays with identical keys using
+//the keys as the table head to  filename + ._astable.txt.
+function writeAsTable($formatted2dArray, $filename)
 {
+    $filename .='_astable.txt';
+    echo 'Writing to ' . $filename . '...' . PHP_EOL;
+    $handle = fopen($filename, 'x');
+    if ($handle === false) {
+        echo 'Error: file already exists, cannot create ' . $filename . PHP_EOL;
+        die();
+    }
     //append |s
     $piped2dArray = [];
     foreach ($formatted2dArray as $innerArray) {
@@ -114,18 +121,19 @@ function displayAsTable($formatted2dArray)
     
     //the keys of tabSizes are also the keys for each table line
     foreach ($tabSizes as $key => $size) {
-        echo formatForTableColumn('| ' . $key, $size);
+        fwrite($handle, formatForTableColumn('| ' . $key, $size));
     }
-    echo PHP_EOL;
+    fwrite($handle, PHP_EOL);
 
-    echo getDashedLine($tabSizes) . PHP_EOL;
+    fwrite($handle, getDashedLine($tabSizes) . PHP_EOL);
 
     foreach ($piped2dArray as $line) {
         foreach ($line as $key => $column) {
-            echo formatForTableColumn($column, $tabSizes[$key]);
+            fwrite($handle, formatForTableColumn($column, $tabSizes[$key]));
         }
-        echo PHP_EOL;
+        fwrite($handle, PHP_EOL);
     }
+
 }
 
 $fileContents = getFileContents($argv[1]);
@@ -142,12 +150,10 @@ foreach ($salesReport as $dataEntry) {
 }
 
 //sort by the value of the first key in each inner array
-asort($formattedReport);
+arsort($formattedReport);
 
-displayAsTable($formattedReport);
-
-
-
+writeAsTable($formattedReport, $argv[1]);
+echo 'Success!' . PHP_EOL;
 
 
 
