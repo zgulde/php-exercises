@@ -22,20 +22,39 @@
         'quietly-played',
         'very-shiny',
         'obnoxiously-loud',
-        'cranked-to-eleven',
+        'cranked-to-eleven'
     ];
 
-    $serverName.= $adjectives[array_rand($adjectives)];
-    $serverName.= '-';
-    $serverName.= $nouns[array_rand($nouns)];
+    $serverName .= $adjectives[array_rand($adjectives)];
+    $serverName .= '-';
+    $serverName .= $nouns[array_rand($nouns)];
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Server Name Generator</title>
+    <style>
+    button{
+        padding: 5px 10px;
+        border-radius: 3px;
+        background: black;
+        color: white;
+    }
+    </style>
 </head>
 <body>
-    <h1>Your Server Name is: <?php echo $serverName?></h1>
+    <h1>Server Name Generator</h1>
+    <h2><?php echo $serverName?></h2>
+    <button id="btn">Try Again!</button>
+    
+    <script>
+        (function(){
+            var btn=document.getElementById("btn");
+            btn.addEventListener('click',function(){
+                window.location.reload();
+            });
+        })();
+    </script>
 </body>
 </html>
