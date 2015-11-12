@@ -24,9 +24,9 @@
     <h1>My Favorite Things</h1>
     <table>
         <tr>
-    <?php foreach ($things as $thing) { ?>
-        <td><?php echo $thing; ?></td>
-    <?php } ?>
+    <?php foreach($things as $thing): ?>
+        <td><?= $thing; ?></td>
+    <?php endforeach ?>
         </tr>
     </table>
 </body>

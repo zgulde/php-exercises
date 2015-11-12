@@ -19,14 +19,22 @@
     </style>
 </head>
 <body>
+
     <table>
-        <?php for($i=1; $i<= 12; $i++){ ?>
-            <tr>
-                <?php for($j=1; $j<= 12; $j++){ ?>
-                    <td><?php echo $i*$j; ?></td>
-                <?php } //end for j ?>
-            </tr>
-        <?php } //end for i ?>
+
+<?php for($i=1; $i<= 12; $i++): ?>
+    <tr>
+
+        <?php for($j=1; $j<= 12; $j++): ?>
+
+            <td><?= $i*$j; ?></td>
+
+        <?php endfor; //end for j ?>
+        
+    </tr>
+<?php endfor; //end for i ?>
+
     </table>
+
 </body>
 </html>

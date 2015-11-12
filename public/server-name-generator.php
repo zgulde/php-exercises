@@ -45,9 +45,9 @@
 </head>
 <body>
     <h1>Server Name Generator</h1>
-    <h2><?php echo $serverName?></h2>
+    <h2><?= echo $serverName?></h2>
     <button id="btn">Try Again!</button>
-    
+
     <script>
         (function(){
             var btn=document.getElementById("btn");
