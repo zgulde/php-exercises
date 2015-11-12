@@ -3,6 +3,19 @@ echo PHP_EOL;
 
 define("TAB_WIDTH", 8);
 
+//returns a trimmed string of the file contents
+function getFileContents($filename)
+{
+    $handle = fopen($filename, 'r');
+    if ($handle === false) {
+        echo "Error: cant find $filename\n";
+        die();
+    }
+    $contents = trim(fread($handle, filesize($filename) ) );
+    fclose($handle);
+    return $contents;
+}
+
 //returns true if the string containes ', ' and at least one of the 
 //csvs is numeric
 function hasCSVs($string)
@@ -19,18 +32,10 @@ function hasCSVs($string)
     return false;
 }
 
-//given a file with newlines, returns an array of lines that have
+//given a string with the contents of a file, returns an array of lines that have
 //comma separated values with at least one csv being a number
-function getCSVLines($filename)
+function getCSVLines($contents)
 {
-    $handle = fopen($filename, 'r');
-    if ($handle === false) {
-        echo "Error: cant find $filename\n";
-        die();
-    }
-    $contents = trim(fread($handle, filesize($filename) ) );
-    fclose($handle);
-
     $array = explode("\n", $contents);
     $parsedArray = [];
 
@@ -43,7 +48,7 @@ function getCSVLines($filename)
 }
 
 //given a string and the width of the column as $numTabs, appends tabs to the 
-//string such that the
+//string such that the string's length will equal the column width
 function formatForTableColumn($string, $numTabs = 1)
 {
     $tabsToInsert = ceil( ( ($numTabs * TAB_WIDTH) - strlen($string) ) / TAB_WIDTH);
@@ -54,8 +59,8 @@ function formatForTableColumn($string, $numTabs = 1)
 }
 
 //given a two dimensional array where the elements are arrays with identical
-//keys, returns an array of the proper tab size for displaying each key value as
-//a table column
+//keys, returns an array with keys that are the same as the inner arrays keys of
+//the proper tab size for displaying each key value as a table column
 function getMaxTabSize($twoDArray)
 {
     $biggestString = [];
@@ -76,8 +81,8 @@ function getMaxTabSize($twoDArray)
     return $tabSizes;
 }
 
-//takes a tabSizes array and calculates the size of the line needed to separate
-//the table head from the body and returns that line
+//takes a tabSizes array from getMaxTabSize and calculates the size of the line
+//needed to separate the table head from the body and returns that line
 function getDashedLine($tabSizes)
 {
     $numOfDashes = 0;
@@ -106,6 +111,7 @@ function displayAsTable($formatted2dArray)
     }
 
     $tabSizes = getMaxTabSize($piped2dArray);
+    
     //the keys of tabSizes are also the keys for each table line
     foreach ($tabSizes as $key => $size) {
         echo formatForTableColumn('| ' . $key, $size);
@@ -122,8 +128,8 @@ function displayAsTable($formatted2dArray)
     }
 }
 
-$filename = $argv[1];
-$salesReport = getCSVLines($filename);
+$fileContents = getFileContents($argv[1]);
+$salesReport = getCSVLines($fileContents);
 
 foreach ($salesReport as $dataEntry) {
     $eachCSV = explode(', ', $dataEntry);
@@ -134,6 +140,9 @@ foreach ($salesReport as $dataEntry) {
     ];
     $formattedReport[] = $formattedLine;
 }
+
+//sort by the value of the first key in each inner array
+asort($formattedReport);
 
 displayAsTable($formattedReport);
 
