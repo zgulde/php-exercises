@@ -69,7 +69,7 @@ function getMaxTabSize($twoDArray)
     //find the longest string for each key in the inner arrays
     foreach ($twoDArray as $innerArray) {
         foreach ($innerArray as $key => $string) {
-            if (strlen($string) > $biggestString[$key]) {
+            if (!array_key_exists($key, $biggestString) || strlen($string) > $biggestString[$key]) {
                 $biggestString[$key] = strlen($string);
             }
         }    
