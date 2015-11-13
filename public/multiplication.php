@@ -22,19 +22,19 @@
 
     <table>
 
-<?php for($i=1; $i<= 12; $i++): ?>
+        <?php for($i=1; $i<= 120; $i++): ?>
 
-    <tr>
+            <tr>
 
-        <?php for($j=1; $j<= 12; $j++): ?>
+                <?php for($j=1; $j<= 12; $j++): ?>
 
-            <td><?= $i*$j; ?></td>
+                    <td><?= $i*$j; ?></td>
 
-        <?php endfor; //end for j ?>
+                <?php endfor; //end for j ?>
 
-    </tr>
-    
-<?php endfor; //end for i ?>
+            </tr>
+            
+        <?php endfor; //end for i ?>
 
     </table>
 

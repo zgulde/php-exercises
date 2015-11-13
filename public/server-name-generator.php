@@ -1,5 +1,8 @@
 <?php
+
+function pageController(){
     $serverName = '';
+
     $nouns = [
         'guitar',
         'keyboard',
@@ -13,6 +16,7 @@
         'bagpipes',
         'didgeridoo'
     ];
+
     $adjectives = [
         'electrical',
         'acoustical',
@@ -28,6 +32,14 @@
     $serverName .= $adjectives[array_rand($adjectives)];
     $serverName .= '-';
     $serverName .= $nouns[array_rand($nouns)];
+
+    return [
+        'serverName' => $serverName
+    ];
+}
+
+extract(pageController());
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,9 +56,11 @@
     </style>
 </head>
 <body>
+    <?php var_dump($_GET); ?>
     <h1>Server Name Generator</h1>
-    <h2><?= echo $serverName?></h2>
+    <h2><?= $serverName;?></h2>
     <button id="btn">Try Again!</button>
+    <?= $_GET['q']; ?>
 
     <script>
         (function(){
