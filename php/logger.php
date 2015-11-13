@@ -7,8 +7,8 @@ function log_message($level, $message)
 {
     $log_entry = PHP_EOL . date('Y-m-d H:i:s') . ' [' . $level . '] ' . $message;
 
-    $filename = 'logs/log-' . date('Y-m-d') . '.log';
-    $handle = fopen($filename, 'a');
+    $filename= 'logs/log-' . date('Y-m-d') . '.log';
+    $handle  = fopen($filename, 'a');
 
     fwrite($handle, $log_entry);
     fclose($handle);
