@@ -20,7 +20,7 @@ function pageController(){
                 '\' on line ' . mt_rand(10,80) . '.' . PHP_EOL; 
 
     $randomError = $errors[array_rand($errors)];
-    $randomToken = $token[array_rand($token)];
+    $randomToken = $tokens[array_rand($tokens)];
 
     return [
         'message' => $message,
