@@ -10,39 +10,40 @@ function redirect(){
     die();
 }
 
-function pageController()
+//redirects if logged in, otherwise returns a message
+function checkAuthorization()
 {
     $username = isset($_POST['username']) ? $_POST['username'] : '' ;
     $password = isset($_POST['password']) ? $_POST['password'] : '' ;
+    $message  = '';
 
-    $message = '';
-
-    if (isAuthorized($username, $password)) {
-        $_SESSION['logged_in_user'] = $username;
-        $_SESSION['is_logged_in']   = true;
+    if (isset($_SESSION['IS_LOGGED_IN']) && $_SESSION['IS_LOGGED_IN']) {
         redirect();
-
-    } elseif ($username != '' && $password != '') {
-        $message = 'You are not authorized!';
-        $_SESSION['is_logged_in'] = false;
     } else {
-        $message = 'Please Log In.';
-        $_SESSION['is_logged_in'] = false;
+        $_SESSION['IS_LOGGED_IN'] = false;
     }
 
+    if (isAuthorized($username, $password)) {
+        $_SESSION['USERNAME']     = $username;
+        $_SESSION['IS_LOGGED_IN'] = true;
+        redirect();
+    } elseif ($username != '' && $password != '') {
+        $message = 'You are not authorized!';
+    } else {
+        $message = 'Please Log In.';
+    }
+
+    return $message;
+}
+
+function pageController()
+{
     return [
-        'message' => $message
+        'message' => checkAuthorization()
     ];
 }
 
 session_start();
-
-if (isset($_SESSION['is_logged_in']) && $_SESSION['is_logged_in']) {
-    redirect();
-}
-
-$_SESSION['is_logged_in'] = false;
-
 extract(pageController());
 
 ?>

@@ -1,5 +1,6 @@
 <?php 
 
+//copypasta from php manual
 function endSession()
 {
     // Unset all of the session variables.
@@ -24,9 +25,15 @@ function redirectToLogin(){
     die();
 }
 
+function pageController(){
+    return [
+        'username' => $_SESSION['USERNAME']
+    ];
+}
+
 session_start();
 
-if ( !($_SESSION['is_logged_in']) ) {
+if ( !($_SESSION['IS_LOGGED_IN']) ) {
     redirectToLogin();
 }
 
@@ -34,6 +41,8 @@ if (!empty($_POST['reset']) ) {
     endSession();
     redirectToLogin();
 }
+
+extract(pageController());
 
  ?>
 
@@ -45,7 +54,7 @@ if (!empty($_POST['reset']) ) {
 </head>
 <body>
     <h1>Authorized</h1>
-    <h2>Hello, <?= $_SESSION['logged_in_user']; ?></h2>
+    <h2>Hello, <?= $username; ?></h2>
     <form method="POST">
         <input type="hidden" name="reset" value="reset">
         <input type="submit" value="Log Out">
