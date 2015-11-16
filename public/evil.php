@@ -24,6 +24,8 @@ function pageController(){
 
     return [
         'message' => $message,
+        'randomToken' => $randomToken,
+        'randomError' => $randomError
     ];
 }
 
