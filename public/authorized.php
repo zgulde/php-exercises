@@ -48,13 +48,16 @@ extract(pageController());
 <head>
     <meta charset="UTF-8">
     <title>Authorized Page</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<?php include 'navbar.php'; ?>
     <h1>Authorized</h1>
     <h2>Hello, <?= $username; ?></h2>
     <form method="POST">
         <input type="hidden" name="reset" value="reset">
         <input type="submit" value="Log Out">
     </form>
+<?php include 'footer.php'; ?>
 </body>
 </html>

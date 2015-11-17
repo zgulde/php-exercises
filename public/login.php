@@ -50,8 +50,10 @@ extract(pageController());
 <head>
     <meta charset="UTF-8">
     <title>login form</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<?php include 'navbar.php'; ?>
     <h1><?= $message; ?></h1>
     <form method="POST">
         <label for="username">Username</label>
@@ -60,5 +62,6 @@ extract(pageController());
         <input type="password" id="password" name="password">
         <input type="submit">
     </form>
+<?php include 'footer.php'; ?>
 </body>
 </html>

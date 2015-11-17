@@ -56,10 +56,13 @@ extract(pageController());
 <head>
     <meta charset="UTF-8">
     <title>Printer Errors</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<?php include 'navbar.php'; ?>
     <h1>Printing...</h1>
     <h2>Error Code <?= mt_rand(100,999) ?></h2>
     <h2><?= $errorMessage ?></h2>
+<?php include 'footer.php'; ?>
 </body>
 </html>

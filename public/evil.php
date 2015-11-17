@@ -38,10 +38,12 @@ extract(pageController());
 <head>
     <meta charset="UTF-8">
     <title>My Server Name Generator</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
- <h1>Your server name is...</h1>
- <div style="font-family: monospace;font-size: 1.5em;"><?= $message ?></div>
-    
+<?php include 'navbar.php'; ?>
+    <h1>Your server name is...</h1>
+    <div style="font-family: monospace;font-size: 1.5em;"><?= $message ?></div>
+<?php include 'footer.php'; ?>
 </body>
 </html>

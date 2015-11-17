@@ -1,0 +1,39 @@
+body {
+  margin: 0; }
+
+header {
+  background: linear-gradient(to bottom right, #646464, black, #646464);
+  width: 100%;
+  padding: 100px 50px; }
+  header h1 {
+    color: white; }
+
+nav {
+  text-align: center;
+  padding: 10px 0;
+  border: 1px solid navy;
+  background: linear-gradient(to bottom, #969696, white, #969696); }
+  nav a {
+    padding: 5px 10px;
+    color: blue;
+    text-decoration: none;
+    border-left: 1px solid navy;
+    border-right: 1px solid navy;
+    margin: 5px; }
+  nav a:hover {
+    text-decoration: underline; }
+  nav a:visited {
+    color: blue; }
+
+main {
+  margin: 0 10px; }
+
+footer {
+  margin-top: 40px;
+  border-top: 1px solid black;
+  text-align: right;
+  padding: 0 10px; }
+  footer p {
+    font-size: 0.8em; }
+
+/*# sourceMappingURL=style.css.map */
