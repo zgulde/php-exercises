@@ -1,13 +1,15 @@
 <?php 
 
+require 'functions.php';
+
 function pageController()
 {
-    $counter = isset($_GET['counter']) ? (int) $_GET['counter'] : 0 ;
-    $action = isset($_GET['action']) ? $_GET['action'] : '' ;
+    $counter = inputGet('counter', 0);
+    $action  = inputGet('action');
 
     return [
         'counter' => $counter,
-        'action' => $action
+        'action'  => $action
     ];
 }
 

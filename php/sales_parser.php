@@ -37,13 +37,14 @@ function hasCSVs($string)
 function getCSVLines($contents)
 {
     $array = explode("\n", $contents);
-    $parsedArray = [];
+    // $parsedArray = [];
 
-    foreach ($array as $line) {
-        if (hasCSVs($line)){
-            $parsedArray[] = $line;
-        }
-    }
+    // foreach ($array as $line) {
+    //     if (hasCSVs($line)){
+    //         $parsedArray[] = $line;
+    //     }
+    // }
+    $parsedArray = array_map('hasCSVs', $array);
     return $parsedArray;
 }
 

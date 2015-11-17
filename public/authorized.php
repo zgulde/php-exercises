@@ -1,5 +1,7 @@
 <?php 
 
+require('functions.php');
+
 //copypasta from php manual
 function endSession()
 {
@@ -20,11 +22,6 @@ function endSession()
     session_destroy();
 }
 
-function redirectToLogin(){
-    header('Location: login.php');
-    die();
-}
-
 function pageController(){
     return [
         'username' => $_SESSION['USERNAME']
@@ -34,12 +31,12 @@ function pageController(){
 session_start();
 
 if ( !($_SESSION['IS_LOGGED_IN']) ) {
-    redirectToLogin();
+    redirect('login.php');
 }
 
 if (!empty($_POST['reset']) ) {
     endSession();
-    redirectToLogin();
+    redirect('login.php');
 }
 
 extract(pageController());
