@@ -1,4 +1,5 @@
 <nav>
+    <a href="index.php">Home</a>
     <a href="login.php">My Login Page</a>
     <a href="ping.php">Ping Pong</a>
     <a href="evil.php">Server Name Generator</a>
