@@ -53,6 +53,7 @@ class Auth
     }
 
     /**
+     * copypasta from php manual
      * ends the current session
      */
     public static function logout()
@@ -76,7 +77,6 @@ class Auth
 
     /**
      * redirects to a given url and kills the script
-     * copypasta from php manual
      *    
      * @param  string $url the url to redirect to
      */

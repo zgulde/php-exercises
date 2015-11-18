@@ -20,6 +20,7 @@ function pageController()
 
 session_start();
 extract(pageController());
+
 ?>
 
 <!DOCTYPE html>
