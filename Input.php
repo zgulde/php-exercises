@@ -22,7 +22,17 @@ class Input
      */
     public static function get($key, $default = null)
     {
-        return self::has($key) ? $_REQUEST[$key] : '' ;
+        return self::has($key) ? $_REQUEST[$key] : $default ;
+    }
+
+    /**
+     * sanitizes a string
+     * @param  string $string string to be escaped
+     * @return string         sanitized string
+     */
+    public static function escape($string)
+    {
+        return htmlspecialchars(strip_tags($string));
     }
 
     ///////////////////////////////////////////////////////////////////////////
