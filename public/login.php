@@ -1,47 +1,19 @@
 <?php 
 
-require 'functions.php';
-
-function isAuthorized($usnm, $pwd)
-{
-    return ($usnm != '' && $pwd == 'password') ? true : false;
-}
-
-//redirects if logged in, otherwise returns a message
-function checkAuthorization()
-{
-    $username = inputGet('username');
-    $password = inputGet('password');
-    $message  = '';
-
-    if (isset($_SESSION['IS_LOGGED_IN']) && $_SESSION['IS_LOGGED_IN']) {
-        redirect('authorized.php');
-    } else {
-        $_SESSION['IS_LOGGED_IN'] = false;
-    }
-
-    if (isAuthorized($username, $password)) {
-        $_SESSION['USERNAME']     = escape($username);
-        $_SESSION['IS_LOGGED_IN'] = true;
-        redirect('authorized.php');
-    } elseif ($username != '' && $password != '') {
-        $message = 'You are not authorized!';
-    } else {
-        $message = 'Please Log In.';
-    }
-
-    return $message;
-}
-
-function pageController()
-{
-    return [
-        'message' => checkAuthorization()
-    ];
-}
+require '../lib/Auth.php';
 
 session_start();
-extract(pageController());
+
+$password = Input::get('password', '');
+$username = Input::get('username', '');
+
+Auth::attempt($username, $password);
+
+if (Auth::isLoggedIn() ) {
+    Auth::redirect('authorized.php');
+}
+
+$message = ($username != '' || $password != '') ? 'Invalid Login': 'Please Log In';
 
 ?>
 
