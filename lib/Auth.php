@@ -27,7 +27,7 @@ class Auth
         if ($usernameIsValid && $passwordIsValid) {
             $_SESSION['LOGGED_IN_USER'] = $username;
             $log->info($username . ' logged in.');
-        } else {
+        } elseif ($username != '') {
             $log->error($username . ' failed to login!');
         }
     }
@@ -53,10 +53,14 @@ class Auth
     }
 
     /**
+     * copypasta from php manual
      * ends the current session
      */
     public static function logout()
     {
+        $log = new Log();
+        $log->info(self::getUsername() . ' logged out');
+
         // Unset all of the session variables.
         $_SESSION = array();
 
@@ -76,7 +80,6 @@ class Auth
 
     /**
      * redirects to a given url and kills the script
-     * copypasta from php manual
      *    
      * @param  string $url the url to redirect to
      */
