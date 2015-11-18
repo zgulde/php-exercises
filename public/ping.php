@@ -1,11 +1,11 @@
 <?php 
 
-require 'functions.php';
+require '../Input.php';
 
 function pageController()
 {
-    $counter = inputGet('counter', 0);
-    $action  = inputGet('action');
+    $counter = Input::get('counter', 0);
+    $action  = Input::get('action');
 
     return [
         'counter' => $counter,
