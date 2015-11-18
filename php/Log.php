@@ -7,7 +7,7 @@ class Log
 
     public function __construct($prefix = 'log')
     {
-        echo 'new Log created' . PHP_EOL;
+        date_default_timezone_set('America/Chicago');
         $this->filename = 'logs/' . $prefix . '-' . date('Y-m-d') . '.log';
         $this->handle   = fopen($this->filename, 'a');
     }
@@ -18,12 +18,12 @@ class Log
         fwrite($this->handle, $log_entry);
     }
 
-    public function logError($message)
+    public function error($message)
     {
         $this->logMessage('ERROR', $message);
     }
 
-    public function logInfo($message)
+    public function info($message)
     {
         $this->logMessage('INFO', $message);
     }
@@ -31,7 +31,6 @@ class Log
     public function __destruct()
     {
         fclose($this->handle);
-        echo 'Log destroyed' . PHP_EOL;
     }
 }
 

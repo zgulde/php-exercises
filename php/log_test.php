@@ -2,9 +2,14 @@
 
 require_once 'Log.php';
 
-$log = new Log('cli');
+$log = new Log();
 
-$log->logError('This is an error message.');
-$log->logInfo('This is an info message.');
+echo 'logging....' . PHP_EOL;
+
+$log->error('This is an error message.');
+$log->info('This is an info message.');
+
+echo 'done!' . PHP_EOL;
 
 ?>
+
