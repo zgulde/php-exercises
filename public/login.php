@@ -2,19 +2,24 @@
 
 require '../lib/Auth.php';
 
-session_start();
+function pageController()
+{
+    $password = Input::get('password', '');
+    $username = Input::get('username', '');
 
-$password = Input::get('password', '');
-$username = Input::get('username', '');
+    Auth::attempt($username, $password);
 
-Auth::attempt($username, $password);
+    if (Auth::isLoggedIn() ) {
+        Auth::redirect('authorized.php');
+    }
 
-if (Auth::isLoggedIn() ) {
-    Auth::redirect('authorized.php');
+    $message = ($username != '' || $password != '') ? 'Invalid Login': 'Please Log In';
+
+    return ['message' => $message];
 }
 
-$message = ($username != '' || $password != '') ? 'Invalid Login': 'Please Log In';
-
+session_start();
+extract(pageController());
 ?>
 
 <!DOCTYPE html>

@@ -2,16 +2,22 @@
 
 require('../lib/Auth.php');
 
+function pageController()
+{
+    if (!Auth::isLoggedIn() ) {
+        Auth::redirect('login.php');
+    }
+
+    if (Input::has('reset')) {
+        Auth::logout();
+        Auth::redirect('login.php');
+    }
+
+    return [];
+}
+
 session_start();
-
-if (!Auth::isLoggedIn() ) {
-    Auth::redirect('login.php');
-}
-
-if (Input::has('reset')) {
-    Auth::logout();
-    Auth::redirect('login.php');
-}
+extract(pageController());
 
  ?>
 
