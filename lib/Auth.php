@@ -39,7 +39,7 @@ class Auth
      */    
     public static function isLoggedIn()
     {
-        return isset($_SESSION['LOGGED_IN_USER']);
+        return Input::has('LOGGED_IN_USER'));
     }
 
     /**
@@ -49,7 +49,7 @@ class Auth
      */
     public static function getUsername()
     {
-        return $_SESSION['LOGGED_IN_USER'];
+        return Input::get('LOGGED_IN_USER');
     }
 
     /**

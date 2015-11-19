@@ -31,7 +31,7 @@ extract(pageController());
 <body>
 <?php include 'navbar.php'; ?>
     <h1>Authorized</h1>
-    <h2>Hello, <?= Auth::getUsername(); ?></h2>
+    <h2>Hello, <?= Input::escape(Auth::getUsername()); ?></h2>
     <form method="POST">
         <input type="hidden" name="reset" value="reset">
         <input type="submit" value="Log Out">
