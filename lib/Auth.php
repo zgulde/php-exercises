@@ -1,7 +1,6 @@
 <?php
 
 require 'Log.php';
-require 'Input.php';
 
 class Auth
 {
@@ -39,7 +38,7 @@ class Auth
      */    
     public static function isLoggedIn()
     {
-        return Input::has('LOGGED_IN_USER'));
+        return isset($_SESSION['LOGGED_IN_USER']);
     }
 
     /**
@@ -49,7 +48,7 @@ class Auth
      */
     public static function getUsername()
     {
-        return Input::get('LOGGED_IN_USER');
+        return $_SESSION['LOGGED_IN_USER'];
     }
 
     /**

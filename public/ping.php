@@ -1,6 +1,6 @@
 <?php 
 
-require '../Input.php';
+require '../lib/Input.php';
 
 function pageController()
 {

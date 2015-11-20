@@ -1,6 +1,7 @@
 <?php 
 
 require '../lib/Auth.php';
+require '../lib/Input.php';
 
 function pageController()
 {
