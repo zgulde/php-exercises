@@ -1,7 +1,5 @@
 <?php
 
-// complete all "todo"s to build a blackjack game
-
 // create an array for suits
 $suits = ['C', 'H', 'S', 'D'];
 
@@ -38,24 +36,28 @@ function getCardValue($card) {
 
     if (is_numeric($value)) {
         return (int) $value;
-    } elseif ($value = 'A') {
+    } elseif ($value == 'A') {
         return 11;
+    } else {
+        return 10;
     }
-
-    return 10;
 }
 
 // get total value for a hand of cards
 // don't forget to factor in aces
 // aces can be 1 or 11 (make them 1 if total value is over 21)
 function getHandTotal($hand) {
-  // todo
+    $total = 0;
+    foreach ($hand as $card) {
+        $total += getCardValue($card);
+    }
+    return $total;
 }
 
 // draw a card from the deck into a hand
 // pass by reference (both hand and deck passed in are modified)
 function drawCard(&$hand, &$deck) {
-  // todo
+    $hand[] = array_pop($deck);
 }
 
 // print out a hand of cards
@@ -66,7 +68,27 @@ function drawCard(&$hand, &$deck) {
 // or:
 // Player: [J D] [2 D] Total: 12
 function echoHand($hand, $name, $hidden = false) {
-  // todo
+    
+    $total = getHandTotal($hand);
+    $firstCard = array_shift($hand);
+
+    echo "$name:";
+    if ($hidden) {
+        $total = '??';
+        echo " [???] ";
+    } else {
+        echo " [$firstCard] ";
+    }
+
+    foreach ($hand as $card) {
+        usleep(300000);
+        echo " [$card] ";
+    }
+
+    usleep(300000);
+    echo "Total: $total";
+    echo PHP_EOL;
+    usleep(1500000);
 }
 
 // build the deck of cards
@@ -76,24 +98,69 @@ $deck = buildDeck($suits, $cards);
 $dealer = [];
 $player = [];
 
-echo "A S\n";
-var_dump(getCardValue('10 S'));
-echo "3 C\n";
-var_dump(getCardValue('3 C'));
-echo "A D\n";
-var_dump(getCardValue('A D'));
-echo "K H\n";
-var_dump(getCardValue('K H'));
-echo "J D\n";
-var_dump(getCardValue('J D'));
-// dealer and player each draw two cards
-// echo the dealer hand, only showing the first card
-// echo the player hand
+drawCard($player,$deck);
+drawCard($player,$deck);
+drawCard($dealer,$deck);
+drawCard($dealer,$deck);
+
+echo PHP_EOL;
+echoHand($dealer, 'Dealer', true);
+echoHand($player, 'Player');
+echo '---------------------------' .PHP_EOL;
 
 // allow player to "(H)it or (S)tay?" till they bust (exceed 21) or stay
-// while ( todo ) {
-//   // todo
-// }
+while ($userAction != 'S' && $userAction != 's') {
+    if (getHandTotal($player) > 21) break;
+    echo PHP_EOL;
+    echo '(H)it or (S)tay?' . PHP_EOL;
+    echo PHP_EOL;
+    echo ' > ';
+    $userAction = trim(fgets(STDIN));
+    if ($userAction == 's' || $userAction == 'S') break;
+    echo PHP_EOL;
+    drawCard($player, $deck);
+    echoHand($player, 'Player');
+}
+
+echo PHP_EOL;
+echoHand($dealer, 'Dealer');
+echo PHP_EOL;
+echoHand($player, 'Player');
+echo PHP_EOL;
+
+if (getHandTotal($player) > 21) {
+    echo PHP_EOL;
+    echo 'BUST!!!' . PHP_EOL;
+    echo PHP_EOL;
+    exit();
+} elseif (getHandTotal($player) == 21) {
+    echo PHP_EOL;
+    echo 'Blackjack!' . PHP_EOL;
+    echo 'You Win!!!' . PHP_EOL;
+    echo PHP_EOL;
+    exit();
+}
+
+while (getHandTotal($dealer) < 17 || (getHandTotal($dealer) < getHandTotal($player)) ){
+    echo PHP_EOL;
+    echo 'Dealer Hits...' . PHP_EOL;
+    echo PHP_EOL;
+    drawCard($dealer, $deck);
+    echoHand($dealer, 'Dealer');
+    echo PHP_EOL;
+}
+
+if (getHandTotal($dealer) > 21) {
+    echo PHP_EOL;
+    echo 'Dealer Busts!!!' . PHP_EOL;
+    echo 'You Win!!!' . PHP_EOL;
+} elseif (getHandTotal($dealer) < getHandTotal($player)) {
+    echo 'You Win!!!' . PHP_EOL;
+} else {
+    echo 'You Lose!!!' . PHP_EOL;
+}
+
+echo PHP_EOL;
 
 // show the dealer's hand (all cards)
 // todo
