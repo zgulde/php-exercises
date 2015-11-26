@@ -4,7 +4,7 @@ require_once 'Card.php';
 
 class Deck
 {
-    public $suits = ['C', 'H', 'S', 'D'];
+    public $suits = ['♣', '♥', '♠', '♦'];
     public $values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
     public $cards = [];
 
