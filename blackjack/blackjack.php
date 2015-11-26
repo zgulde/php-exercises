@@ -1,5 +1,7 @@
 <?php
 
+require_once 'Deck.php';
+
 // create an array for suits
 $suits = ['C', 'H', 'S', 'D'];
 
@@ -88,7 +90,7 @@ function echoHand($hand, $name, $hidden = false) {
     usleep(300000);
     echo "Total: $total";
     echo PHP_EOL;
-    usleep(1500000);
+    usleep(1000000);
 }
 
 // build the deck of cards
@@ -97,6 +99,7 @@ $deck = buildDeck($suits, $cards);
 // initialize a dealer and player hand
 $dealer = [];
 $player = [];
+$userAction = '';
 
 drawCard($player,$deck);
 drawCard($player,$deck);
