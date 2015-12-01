@@ -41,6 +41,7 @@ $dealer = [];
 $player = [];
 
 $deck->shuffle();
+
 array_push($dealer, $deck->draw(), $deck->draw());
 array_push($player, $deck->draw(), $deck->draw());
 
@@ -59,9 +60,6 @@ while ($userAction != 'S' && $userAction != 's') {
     echoHand($player, 'Player');
 }
 
-echoHand($dealer, 'Dealer');
-echoHand($player, 'Player');
-
 if (getHandTotal($player) > 21) {
     echo 'BUST!!!' . PHP_EOL;
     exit();
@@ -70,6 +68,9 @@ if (getHandTotal($player) > 21) {
     echo 'You Win!!!' . PHP_EOL;
     exit();
 }
+
+echoHand($dealer, 'Dealer');
+echoHand($player, 'Player');
 
 while (getHandTotal($dealer) < 17 || (getHandTotal($dealer) < getHandTotal($player)) ){
     echo 'Dealer Hits...' . PHP_EOL;
