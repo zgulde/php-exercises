@@ -53,7 +53,7 @@ foreach ($parks as $park) {
     unset($park[1]);
     unset($park[5]);
     $park[0] = substr($park[0], 1);
-    $park[2] = substr($park[2], 0, strpos($park[2], ' '));
+    $park[2] = preg_replace('/\s\d.*/', '', $park[2]);
     $park[3] = formatDate($park[3]);
     $park[4] = substr($park[4], 0, strpos($park[4], ' '));
     $park[4] = str_replace(',', '', $park[4]);
