@@ -1,19 +1,21 @@
 <?php
 
 /**
- * This is a work in progress!
- * 
- * go to http://wikitables.geeksta.net/url/?url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FList_of_best-selling_albums
- * download the table you want to parse
- * from your shell run
- *     php album_parser.php "downloadedcsvfile"
- * this script will create a file named formatted_for_sql.txt
+ * Work in progress!!!
  *
- * you will still need to clean up the output a little, eg there is still a ', '
- * in the last entry for each row
+ * go here:
+ *     http://wikitables.geeksta.net/url/?url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FList_of_national_parks_of_the_United_States
+ *
+ * save as 'xxx.csv'
+ *
+ * run this like so
+ *     $ php parks_parser.php xxx.csv > xxx.txt
+ *
+ * xxx.txt will contain all the data foratted as a php associative array
+ *
+ * note you may have to clean up the output just a little bit
  */
 
-// nae, location, date estb., area
 
 function formatDate($string)
 {
@@ -29,6 +31,10 @@ function formatDate($string)
 
 function getFileContents($filename)
 {
+    if ($filename == '') {
+        echo 'Error: no filename given!' . PHP_EOL;
+        die();
+    }
     $handle = fopen($filename, 'r');
     if ($handle === false) {
         echo "Error: cant find $filename\n";
@@ -46,18 +52,18 @@ foreach ($parks as $park) {
     $park = explode('","', $park);
     unset($park[1]);
     unset($park[5]);
-    unset($park[6]);
     $park[0] = substr($park[0], 1);
     $park[2] = substr($park[2], 0, strpos($park[2], ' '));
     $park[3] = formatDate($park[3]);
     $park[4] = substr($park[4], 0, strpos($park[4], ' '));
     $park[4] = str_replace(',', '', $park[4]);
+    $park[6] = str_replace('"', '', $park[6]);
+    $park[6] = str_replace("'", '', $park[6]);
     $nationalParks[] = $park;
 }
 
 unset($nationalParks[0]);
 
 foreach ($nationalParks as $park) {
-    echo '[' . PHP_EOL . "    'name' => '${park[0]}', 'location' => '${park[2]}',
-    'date established' => '${park[3]}', 'area'  => '${park[4]}'" . PHP_EOL . '],' . PHP_EOL;
+    echo '[' . PHP_EOL . "    'name' => '${park[0]}', 'location' => '${park[2]}', 'date established' => '${park[3]}', 'area'  => '${park[4]}', 'description' => '${park[6]}'" . PHP_EOL . '],' . PHP_EOL;
 }
