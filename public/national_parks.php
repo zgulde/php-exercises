@@ -1,33 +1,55 @@
 <?php 
 require_once '../parks_dbc.php';
 
-function getQuery($dbc, $query)
+function getQueryResults($dbc, $query)
 {
     return $dbc->query($query)->fetchAll(PDO::FETCH_ASSOC);
 }
 
-$p = isset($_REQUEST['p']) ? $_REQUEST['p'] : 0 ;
-$limit = 5;
-$offset = $limit * $p;
+function pageController($dbc)
+{
+    $p = (isset($_REQUEST['p']) && is_numeric($_REQUEST['p'])) ? $_REQUEST['p'] : 0;
+    $limit = (isset($_GET['limit']) && is_numeric($_GET['limit'])) ? $_GET['limit'] : 5;
 
-$query = 
-    "SELECT name as 'Name',
-    location as 'Location',
-    date_established as 'Date Established',
-    area_in_acres as 'Area (in acres)',
-    description as 'Description'
-    FROM national_parks
-    LIMIT $limit OFFSET $offset";
+    $numRows = $dbc->query('SELECT count(id) FROM national_parks;')->fetch()[0];
 
-$parksResults = getQuery($dbc, $query);
+    $maxNumPages = floor($numRows / $limit);
 
-// $maxNumPages = floor(count($parksResults) / $limit);
-// 
-// hard code for now
-$maxNumPages = 11;
+    if ($p < 0) {
+        $p = 0;
+    } else if ($p > $maxNumPages){
+        $p = $maxNumPages;
+    }
 
-$prev = ($p == 0) ? 0: $p - 1;
-$next = ($p == $maxNumPages) ? $maxNumPages: $p + 1;
+    $offset = $limit * $p;
+
+    $query = 
+        "SELECT name as 'Name',
+        location as 'Location',
+        date_established as 'Date Established',
+        area_in_acres as 'Area (in acres)',
+        description as 'Description'
+        FROM national_parks
+        LIMIT $limit OFFSET $offset";
+
+    $parksResults = getQueryResults($dbc, $query);
+
+    foreach ($parksResults as &$park) {
+        $date = strtotime($park['Date Established']);
+        $park['Date Established'] = date("F d, Y", $date);
+    }
+
+    $prev = ($p <= 0)            ?            0 : $p - 1;
+    $next = ($p >= $maxNumPages) ? $maxNumPages : $p + 1;
+
+    return [
+        'parksResults' => $parksResults,
+        'p' => $p,
+        'limit' => $limit
+    ];
+}
+
+extract(pageController($dbc));
 
 
  ?>
@@ -37,13 +59,31 @@ $next = ($p == $maxNumPages) ? $maxNumPages: $p + 1;
     <meta charset="UTF-8">
     <title>National Parks</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/parks.css">
+    <link href='https://fonts.googleapis.com/css?family=PT+Sans:400,700|PT+Serif:400,700' rel='stylesheet' type='text/css'>
 </head>
 <body>
     <?php include 'navbar.php'; ?>
     <h1>National Parks</h1>
-    <a href="national_parks.php?p=<?= $prev; ?>">Prev</a>
-    <a href="national_parks.php?p=<?= $next; ?>">Next</a>
-    <table>
+    <hr>
+    <div class="parks-nav">
+        <form>
+            <input type="hidden" id='page' name='p' value=<?= $p; ?>>
+            <input type="submit" id='prev' value='Prev'>
+            <input type="submit" id='next' value='Next'>
+            <label for="limit">results per page</label>
+            <select id='limit' name="limit" id="">
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+            </select>
+        </form>
+    </div>
+    <table class='table table-hover table-bordered'>
         <tr>
             <?php foreach ($parksResults[0] as $title => $notUsed): ?>
                 <th><?= $title; ?></th>
@@ -58,5 +98,26 @@ $next = ($p == $maxNumPages) ? $maxNumPages: $p + 1;
         <?php endforeach; ?>
     </table>
     <?php include 'footer.php'; ?>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>
+
+        var limit = <?php echo $limit;?>;
+
+        $('option').each(function(){
+            if ($(this).val() == limit) {
+                $(this).attr('selected','selected');
+            }
+        });
+
+        $('#prev').click(function(e){
+            $('#page').attr('value', $('#page').attr('value') - 1);
+        });
+
+        $('#next').click(function(e){
+            $('#page').attr('value', parseInt($('#page').attr('value')) + 1);
+        });
+
+    </script>
 </body>
 </html>

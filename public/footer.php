@@ -1,3 +1,3 @@
 <footer>
-    <p>Design by <a href="http://zgulde.github.io">Me</a>.</p>
+    <p>Design by <a href="http://zgulde.com">Me</a>.</p>
 </footer>

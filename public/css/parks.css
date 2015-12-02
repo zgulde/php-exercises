@@ -1,0 +1,40 @@
+* {
+  font-family: 'PT Sans'; }
+
+body {
+  background: url(/img/confectionary.png); }
+
+h1 {
+  font-family: 'PT Serif'; }
+
+th {
+  text-align: center; }
+
+th, td {
+  vertical-align: middle !important; }
+
+table {
+  margin: 10px 0;
+  background: rgba(255, 255, 255, 0.5); }
+
+hr {
+  margin: 0; }
+
+.parks-nav {
+  margin: 15px;
+  margin-left: 50px;
+  font-size: 1.33em; }
+  .parks-nav label {
+    font-weight: normal;
+    margin-left: 20px; }
+  .parks-nav input {
+    border: none;
+    background: none;
+    color: blue;
+    padding: 0 10px; }
+  .parks-nav input:hover {
+    text-decoration: underline; }
+  .parks-nav input:focus, .parks-nav input:active {
+    outline: 0; }
+
+/*# sourceMappingURL=parks.css.map */
