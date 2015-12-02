@@ -8,8 +8,12 @@ function getQueryResults($dbc, $query)
 
 function pageController($dbc)
 {
-    $p = (isset($_REQUEST['p']) && is_numeric($_REQUEST['p'])) ? $_REQUEST['p'] : 0;
-    $limit = (isset($_GET['limit']) && is_numeric($_GET['limit'])) ? $_GET['limit'] : 5;
+    $p = (isset($_REQUEST['p']) && is_numeric($_REQUEST['p'])) ? floor($_REQUEST['p']) : 0;
+    $limit = (isset($_GET['limit']) && is_numeric($_GET['limit'])) ? floor($_GET['limit']) : 5;
+
+    if (3 > $limit || $limit > 8){
+        $limit = 5;
+    }
 
     $numRows = $dbc->query('SELECT count(id) FROM national_parks;')->fetch()[0];
 
@@ -39,13 +43,11 @@ function pageController($dbc)
         $park['Date Established'] = date("F d, Y", $date);
     }
 
-    $prev = ($p <= 0)            ?            0 : $p - 1;
-    $next = ($p >= $maxNumPages) ? $maxNumPages : $p + 1;
-
     return [
         'parksResults' => $parksResults,
         'p' => $p,
-        'limit' => $limit
+        'limit' => $limit,
+        'maxNumPages' => $maxNumPages
     ];
 }
 
@@ -66,9 +68,8 @@ extract(pageController($dbc));
 <body>
     <?php include 'navbar.php'; ?>
     <h1>National Parks</h1>
-    <hr>
     <div class="parks-nav">
-        <form>
+        <form id='form'>
             <input type="hidden" id='page' name='p' value=<?= $p; ?>>
             <input type="submit" id='prev' value='Prev'>
             <input type="submit" id='next' value='Next'>
@@ -102,7 +103,15 @@ extract(pageController($dbc));
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script>
 
-        var limit = <?php echo $limit;?>;
+        var limit = <?= $limit;?>;
+        var currentPage = <?= $p; ?>;
+        var maxNumPages = <?= $maxNumPages;?>;
+
+        if (currentPage >= maxNumPages) {
+            $('#next').attr('disabled','disabled');
+        } else if (currentPage <= 0){
+            $('#prev').attr('disabled','disabled');
+        }
 
         $('option').each(function(){
             if ($(this).val() == limit) {
@@ -110,12 +119,16 @@ extract(pageController($dbc));
             }
         });
 
-        $('#prev').click(function(e){
+        $('#prev').click(function(){
             $('#page').attr('value', $('#page').attr('value') - 1);
         });
 
-        $('#next').click(function(e){
+        $('#next').click(function(){
             $('#page').attr('value', parseInt($('#page').attr('value')) + 1);
+        });
+
+        $('#limit').change(function(){
+            $('#form').submit();
         });
 
     </script>

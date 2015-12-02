@@ -10,6 +10,7 @@ body{
 
 h1{
     font-family: 'PT Serif';
+    display: inline-block;
 }
 
 th{
@@ -30,6 +31,7 @@ hr{
 }
 
 .parks-nav{
+    display: inline-block;
     margin: 15px;
     margin-left: 50px;
     font-size: 1.33em;   
@@ -52,5 +54,10 @@ hr{
 
     input:focus, input:active{
         outline: 0;
+    }
+
+    input:disabled{
+        color: black;
+        cursor: not-allowed;
     }
 }

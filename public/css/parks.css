@@ -5,7 +5,8 @@ body {
   background: url(/img/confectionary.png); }
 
 h1 {
-  font-family: 'PT Serif'; }
+  font-family: 'PT Serif';
+  display: inline-block; }
 
 th {
   text-align: center; }
@@ -21,6 +22,7 @@ hr {
   margin: 0; }
 
 .parks-nav {
+  display: inline-block;
   margin: 15px;
   margin-left: 50px;
   font-size: 1.33em; }
@@ -36,5 +38,8 @@ hr {
     text-decoration: underline; }
   .parks-nav input:focus, .parks-nav input:active {
     outline: 0; }
+  .parks-nav input:disabled {
+    color: black;
+    cursor: not-allowed; }
 
 /*# sourceMappingURL=parks.css.map */
