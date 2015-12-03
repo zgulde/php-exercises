@@ -189,14 +189,22 @@ $nationalParks =
 ];
 
 $dbc->exec('TRUNCATE national_parks');
-echo 'national_parks truncated!';
+echo 'national_parks truncated!' . PHP_EOL;
 
 echo 'Inserting values...' . PHP_EOL;
+
+$query  = 'INSERT INTO national_parks (name, location, date_established, area_in_acres, description) ';
+$query .= 'VALUES (:name, :location, :date, :area, :description)';
+$stmt   = $dbc->prepare($query);
+
 foreach ($nationalParks as $park) {
-    $query = 'INSERT INTO national_parks (name, location, date_established, area_in_acres, description)';
-    $query .= "VALUES (\"${park['name']}\", \"${park['location']}\", \"${park['date established']}\", ${park['area']}, \"${park['description']}\")";
-    $dbc->exec($query);
-    echo 'inserted value with id: ' . $dbc->lastInsertId() . PHP_EOL;
+    $stmt->bindValue(':name', $park['name'], PDO::PARAM_STR);
+    $stmt->bindValue(':location', $park['location'], PDO::PARAM_STR);
+    $stmt->bindValue(':date', $park['date established'], PDO::PARAM_STR);
+    $stmt->bindValue(':area', $park['area'], PDO::PARAM_STR);
+    $stmt->bindValue(':description', $park['description'], PDO::PARAM_STR);
+
+    $stmt->execute();
 }
 
 echo 'Done!' . PHP_EOL;

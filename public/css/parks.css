@@ -4,7 +4,7 @@
 body {
   background: url(/img/confectionary.png); }
 
-h1 {
+h1, h2 {
   font-family: 'PT Serif';
   display: inline-block; }
 
@@ -40,6 +40,35 @@ hr {
     outline: 0; }
   .parks-nav input:disabled {
     color: black;
-    cursor: not-allowed; }
+    cursor: not-allowed;
+    text-decoration: none; }
+
+.insert-form {
+  display: block; }
+  .insert-form h2 {
+    margin-top: 10px;
+    margin-bottom: 30px; }
+  .insert-form label {
+    display: inline-block;
+    font-size: 1.25em; }
+  .insert-form input {
+    margin: 5px; }
+  .insert-form p {
+    font-weight: normal;
+    margin-left: 25px;
+    font-size: 0.9em;
+    color: black;
+    opacity: 0.8; }
+  .insert-form textarea {
+    display: block;
+    width: 400px;
+    height: 100px; }
+
+.invalid {
+  box-shadow: 0 0 2px 2px red; }
+
+.container {
+  margin: 0;
+  padding: 0; }
 
 /*# sourceMappingURL=parks.css.map */

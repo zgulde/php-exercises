@@ -32,7 +32,7 @@ footer {
   margin-top: 40px;
   border-top: 1px solid black;
   text-align: right;
-  padding: 30px 10px;
+  padding: 30px;
   background: linear-gradient(to bottom, transparent 20%, rgba(0, 0, 0, 0.7), transparent 80%); }
   footer p {
     font-size: 0.7em;

@@ -6,9 +6,34 @@ function getQueryResults($dbc, $query)
     return $dbc->query($query)->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function escape($string)
+{
+    return htmlspecialchars(strip_tags($string));
+}
+
+function postHandler($dbc)
+{
+    var_dump($_POST);
+
+    $park = $_POST;
+
+    $query  = 'INSERT INTO national_parks (name, location, date_established, area_in_acres, description) ';
+    $query .= 'VALUES (:name, :location, :date, :area, :description)';
+
+    $stmt = $dbc->prepare($query);
+
+    $stmt->bindValue(':name', $park['name'], PDO::PARAM_STR);
+    $stmt->bindValue(':location', $park['location'], PDO::PARAM_STR);
+    $stmt->bindValue(':date', $park['date-estb'], PDO::PARAM_STR);
+    $stmt->bindValue(':area', $park['area'], PDO::PARAM_STR);
+    $stmt->bindValue(':description', $park['description'], PDO::PARAM_STR);
+
+    $stmt->execute();
+}
+
 function pageController($dbc)
 {
-    $p = (isset($_REQUEST['p']) && is_numeric($_REQUEST['p'])) ? floor($_REQUEST['p']) : 0;
+    $p = (isset($_REQUEST['p']) && is_numeric($_GET['p'])) ? floor($_GET['p']) : 0;
     $limit = (isset($_GET['limit']) && is_numeric($_GET['limit'])) ? floor($_GET['limit']) : 5;
 
     if (3 > $limit || $limit > 8){
@@ -53,8 +78,12 @@ function pageController($dbc)
 
 extract(pageController($dbc));
 
+if(!empty($_POST)){
+    postHandler($dbc);
+}
 
  ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -90,47 +119,50 @@ extract(pageController($dbc));
                 <th><?= $title; ?></th>
             <?php endforeach; ?>
         </tr>
-        <?php foreach ($parksResults as $park): ?>
-            <tr>
-                <?php foreach ($park as $item): ?>
-                    <td><?= $item; ?></td>
-                <?php endforeach; ?>
-            </tr>
-        <?php endforeach; ?>
+            <?php foreach ($parksResults as $park): ?>
+                <tr>
+                    <?php foreach ($park as $item): ?>
+                        <td><?= $item; ?></td>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
     </table>
+    <div class="insert-form container">
+        <h2>Add a Park!</h2>
+        <form action='national_parks.php' method="post" id='add-park-form'>
+            <label for="name">Name: 
+                <input id='name' type="text" name='name'>
+                <p>Name of the Park</p>
+            </label>
+            <label for="location">Location: 
+                <input id='location' type="text" name='location'>
+                <p>Where the park is located</p>
+            </label>
+            <label for="date-estb">Date Established: 
+                <input id='date-estb' type="text" name='date-estb'>
+                <p>YYYY-MM-DD</p>
+            </label>
+            <label for="area">Area: 
+                <input id='area' type="text" name='area'>
+                <p>in acres</p>
+            </label>
+            <br>
+            <label for="description">Description: 
+                <textarea id='description' type="text" name='description'></textarea>
+                <p>park description</p>
+            </label>
+            <br>
+            <input type="submit">
+        </form>
+    </div>
     <?php include 'footer.php'; ?>
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>    
+    <script>
         var limit = <?= $limit;?>;
         var currentPage = <?= $p; ?>;
         var maxNumPages = <?= $maxNumPages;?>;
-
-        if (currentPage >= maxNumPages) {
-            $('#next').attr('disabled','disabled');
-        } else if (currentPage <= 0){
-            $('#prev').attr('disabled','disabled');
-        }
-
-        $('option').each(function(){
-            if ($(this).val() == limit) {
-                $(this).attr('selected','selected');
-            }
-        });
-
-        $('#prev').click(function(){
-            $('#page').attr('value', $('#page').attr('value') - 1);
-        });
-
-        $('#next').click(function(){
-            $('#page').attr('value', parseInt($('#page').attr('value')) + 1);
-        });
-
-        $('#limit').change(function(){
-            $('#form').submit();
-        });
-
     </script>
+    <script src=/js/parks.js></script>
 </body>
 </html>
