@@ -63,9 +63,36 @@ hr {
     display: block;
     width: 400px;
     height: 100px; }
+  .insert-form input, .insert-form textarea {
+    font-weight: normal; }
+  .insert-form input:focus, .insert-form textarea:focus {
+    outline: 0; }
+
+.delete select, .delete input {
+  font-size: 1.25em; }
 
 .invalid {
   box-shadow: 0 0 2px 2px red; }
+
+.submit-btn {
+  font-size: 1.25em;
+  color: black;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 3px 10px;
+  border: 1px solid black;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  transition: all 0.5s; }
+
+.submit-btn:hover {
+  color: white;
+  background: black; }
+
+.submit-btn:active {
+  box-shadow: 0 0 10px 10px rgba(255, 255, 255, 0.8);
+  outline: 0; }
+
+.submit-btn:focus {
+  outline: 0; }
 
 .container {
   margin: 0;

@@ -13,8 +13,6 @@ function escape($string)
 
 function postHandler($dbc)
 {
-    var_dump($_POST);
-
     $park = $_POST;
 
     $query  = 'INSERT INTO national_parks (name, location, date_established, area_in_acres, description) ';
@@ -33,14 +31,14 @@ function postHandler($dbc)
 
 function pageController($dbc)
 {
-    $p = (isset($_REQUEST['p']) && is_numeric($_GET['p'])) ? floor($_GET['p']) : 0;
+    $p     = (isset($_REQUEST['p']) && is_numeric($_GET['p'])) ? floor($_GET['p']) : 0;
     $limit = (isset($_GET['limit']) && is_numeric($_GET['limit'])) ? floor($_GET['limit']) : 5;
 
     if (3 > $limit || $limit > 8){
         $limit = 5;
     }
 
-    $numRows = $dbc->query('SELECT count(id) FROM national_parks;')->fetch()[0];
+    $numRows = $dbc->query('SELECT count(id) FROM national_parks;')->fetch()[0] - 1;
 
     $maxNumPages = floor($numRows / $limit);
 
@@ -59,6 +57,7 @@ function pageController($dbc)
         area_in_acres as 'Area (in acres)',
         description as 'Description'
         FROM national_parks
+        ORDER BY name
         LIMIT $limit OFFSET $offset";
 
     $parksResults = getQueryResults($dbc, $query);
@@ -89,6 +88,7 @@ if(!empty($_POST)){
 <head>
     <meta charset="UTF-8">
     <title>National Parks</title>
+    <link rel="icon" type="image/png" href="/img/favicon.ico">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link rel="stylesheet" href="css/parks.css">
@@ -127,6 +127,18 @@ if(!empty($_POST)){
                 </tr>
             <?php endforeach; ?>
     </table>
+    <div class="delete">
+        <h2>Delete a Park!</h2>
+        <form method='post' action='delete_park.php'>
+            <select name="park_to_delete">
+                <option selected disabled>Park Name</option>
+                <?php foreach ($parksResults as $park): ?>
+                    <option value="<?= $park['Name']; ?>"><?= $park['Name']; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <input class='submit-btn' type="submit">
+        </form>
+    </div>
     <div class="insert-form container">
         <h2>Add a Park!</h2>
         <form action='national_parks.php' method="post" id='add-park-form'>
@@ -152,7 +164,7 @@ if(!empty($_POST)){
                 <p>park description</p>
             </label>
             <br>
-            <input type="submit">
+            <input class='submit-btn' type="submit">
         </form>
     </div>
     <?php include 'footer.php'; ?>
