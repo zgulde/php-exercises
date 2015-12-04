@@ -27,6 +27,9 @@ function postHandler($dbc)
     $stmt->bindValue(':description', $park['description'], PDO::PARAM_STR);
 
     $stmt->execute();
+
+    header("Refresh:0");
+    exit();
 }
 
 function pageController($dbc)

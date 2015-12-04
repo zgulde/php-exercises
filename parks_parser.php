@@ -67,3 +67,5 @@ unset($nationalParks[0]);
 foreach ($nationalParks as $park) {
     echo '[' . PHP_EOL . "    'name' => '${park[0]}', 'location' => '${park[2]}', 'date established' => '${park[3]}', 'area'  => '${park[4]}', 'description' => '${park[6]}'" . PHP_EOL . '],' . PHP_EOL;
 }
+
+

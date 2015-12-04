@@ -40,24 +40,28 @@ $(document).ready(function(){
         var validLocation = /^[a-zA-Z][a-zA-Z\d]+(\s*[a-zA-Z,\d])*$/;
         var validDate = /^[12]\d\d\d-[01]\d-[0-3]\d$/;
         var validArea = /^\d+(\.\d+)?$/;
-        var validDescription = /^.+$/;
+        var validDescription = /^.+(\s*.+)*$/;
 
         if ( !validName.test($name.val() ) ){
             $name.addClass('invalid');
             e.preventDefault();
         }
+        
         if ( !validLocation.test($location.val() ) ){
             $location.addClass('invalid');
             e.preventDefault();
         }
+        
         if ( !validDate.test($date.val() ) ){
             $date.addClass('invalid');
             e.preventDefault();
         }
+        
         if ( !validArea.test($area.val() ) ){
             $area.addClass('invalid');
             e.preventDefault();
         }
+        
         if ( !validDescription.test($description.val() ) ){
             $description.addClass('invalid');
             e.preventDefault();
