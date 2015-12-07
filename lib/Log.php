@@ -49,13 +49,19 @@ class Log
     }
 
     /**
-     * closes the log file
+     * writes a new line and closes the log file
      */
     public function __destruct()
     {
+        fwrite($this->handle, PHP_EOL);
         fclose($this->handle);
     }
 
+    /**
+     * checks that the filename is a string, creates the file and ensures it 
+     * is writable
+     * @param string $f the filename
+     */
     private function setFilename($f)
     {
         if (is_string($f) && !empty($f)) {

@@ -5,15 +5,15 @@ class Model
     private $attributes = [];
     protected static $table;
 
-    public function __set($n, $v)
+    public function __set($name, $value)
     {
-        $this->attributes[$n] = $v;
+        $this->attributes[$name] = $value;
     }
 
-    public function __get($n)
+    public function __get($name)
     {
-        if (array_key_exists($n, $this->attributes)) {
-            return $this->attributes[$n];
+        if (array_key_exists($name, $this->attributes)) {
+            return $this->attributes[$name];
         }
 
         return null;

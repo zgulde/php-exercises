@@ -9,6 +9,7 @@ echo "perimeter: {$r->getPerimeter()}" . PHP_EOL;
 echo "area: {$r->getArea()}" . PHP_EOL;
 
 echo '---------------------' . PHP_EOL;
+
 $s = new Square(5);
 
 echo 'Square with side 5' . PHP_EOL;
