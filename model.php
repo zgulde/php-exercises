@@ -53,44 +53,50 @@ class Model {
     public function save()
     {
         $table = static::$table;
+
         if ($this->id != '') {
 
             $id = $this->id;
-
             unset($this->attributes['id']);
 
-            foreach ($this->attributes as $key => $value) {
-                $query = "UPDATE $table SET $key = :value WHERE id=$id";
-                $stmt = static::$dbc->prepare($query);
-                $stmt->bindValue(':value', $value, PDO::PARAM_STR);
-                $stmt->execute();
+            $updateStmt = [];
+            $columns = array_keys($this->attributes);
+            foreach ($columns as $key) {
+                $updateStmt[] = "$key = :$key";
             }
+
+            $updateStmt = implode(', ', $updateStmt);
+
+            $query = "UPDATE $table SET $updateStmt WHERE id=$id";
+            $stmt = static::$dbc->prepare($query);
+
+            foreach ($this->attributes as $key => $value) {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_STR);
+            }
+            $stmt->execute();
 
             $this->attributes['id'] = $id;
 
         } else {
+            // without manually sorting the array, mysql does some sort of
+            // sorting that screws up the order of the values inserted
             asort($this->attributes);
-            $query = "INSERT INTO $table (";
-            foreach ($this->attributes as $key => $value) {
-                $query .= "$key, ";
+
+            $columns = array_keys($this->attributes);
+            $paramatizedValues = [];
+            foreach ($columns as $column) {
+                $paramatizedValues[] = ":$column";
             }
-            $query .= ')';
 
-            $query .= "VALUES (";
-            for ($i=0; $i < count($this->attributes); $i++) { 
-                $query .= ":value$i, ";
-            }
-            $query .= ')';
+            $columnNames = implode(', ', $columns);
+            $paramatizedValues = implode(', ', $paramatizedValues);
 
-            // remove the last comma for the column names and values
-            $query = preg_replace('/,\s\)/', ') ', $query);
-
+            $query = "INSERT INTO $table ($columnNames) VALUES ($paramatizedValues)";
             $stmt = static::$dbc->prepare($query);
 
-            $i = 0;
-            foreach ($this->attributes as $value) {
-                $stmt->bindValue(":value$i", $value, PDO::PARAM_STR);
-                $i++;
+            // bind each value
+            foreach ($this->attributes as $key => $value) {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_STR);
             }
 
             $stmt->execute();
