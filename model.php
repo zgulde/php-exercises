@@ -5,7 +5,7 @@ class Model {
     protected static $dbc;
     protected static $table;
 
-    public $attributes = array();
+    private $attributes = array();
 
     /*
      * Constructor
@@ -55,7 +55,9 @@ class Model {
         $table = static::$table;
 
         if ($this->id != '') {
-
+            // there is an id key, so we need to update
+            // remove the id so it is not part of the update query
+            // add it back later
             $id = $this->id;
             unset($this->attributes['id']);
 
@@ -78,6 +80,8 @@ class Model {
             $this->attributes['id'] = $id;
 
         } else {
+
+            // no id, so we need to insert
             // without manually sorting the array, mysql does some sort of
             // sorting that screws up the order of the values inserted
             asort($this->attributes);
@@ -99,7 +103,7 @@ class Model {
                 $stmt->bindValue(":$key", $value, PDO::PARAM_STR);
             }
 
-            $stmt->execute();
+            // $stmt->execute();
         }
         // @TODO: Ensure there are attributes before attempting to save
         // @TODO: Perform the proper action - if the `id` is set, this is an update, if not it is a insert
@@ -151,8 +155,10 @@ class Model {
 
         // @TODO: Learning from the previous method, return all the matching records
         $table = static::$table;
-        $query = "SELECT * FROM $table";
-        $result = self::$dbc->query($query)->fetchAll(PDO::FETCH_ASSOC);
+        $myQuery = "SELECT * FROM $table";
+
+        $stmt = self::$dbc->query($myQuery);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $instance = null;
         if ($result)
@@ -161,6 +167,14 @@ class Model {
             $instance->attributes = $result;
         }
         return $instance;
+    }
+
+    public static function delete($id)
+    {
+        self::dbConnect();
+        $table = static::$table;
+        $query = "DELETE FROM $table WHERE id=$id";
+        self::$dbc->query($query);
     }
 
 }
