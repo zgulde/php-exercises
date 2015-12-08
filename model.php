@@ -53,23 +53,53 @@ class Model {
     public function save()
     {
         $table = static::$table;
-        // @TODO: Ensure there are attributes before attempting to save
-
-        // @TODO: Perform the proper action - if the `id` is set, this is an update, if not it is a insert
         if ($this->id != '') {
+
+            $id = $this->id;
+
+            unset($this->attributes['id']);
+
             foreach ($this->attributes as $key => $value) {
-                $query = "UPDATE $table SET $key = :value WHERE id={$this->id}";
+                $query = "UPDATE $table SET $key = :value WHERE id=$id";
                 $stmt = static::$dbc->prepare($query);
                 $stmt->bindValue(':value', $value, PDO::PARAM_STR);
                 $stmt->execute();
             }
+
+            $this->attributes['id'] = $id;
+
+        } else {
+            asort($this->attributes);
+            $query = "INSERT INTO $table (";
+            foreach ($this->attributes as $key => $value) {
+                $query .= "$key, ";
+            }
+            $query .= ')';
+
+            $query .= "VALUES (";
+            for ($i=0; $i < count($this->attributes); $i++) { 
+                $query .= ":value$i, ";
+            }
+            $query .= ')';
+
+            // remove the last comma for the column names and values
+            $query = preg_replace('/,\s\)/', ') ', $query);
+
+            $stmt = static::$dbc->prepare($query);
+
+            $i = 0;
+            foreach ($this->attributes as $value) {
+                $stmt->bindValue(":value$i", $value, PDO::PARAM_STR);
+                $i++;
+            }
+
+            $stmt->execute();
         }
+        // @TODO: Ensure there are attributes before attempting to save
+        // @TODO: Perform the proper action - if the `id` is set, this is an update, if not it is a insert
         // @TODO: Ensure that update is properly handled with the id key
-
         // @TODO: After insert, add the id back to the attributes array so the object can properly reflect the id
-
         // @TODO: You will need to iterate through all the attributes to build the prepared query
-
         // @TODO: Use prepared statements to ensure data security
     }
 

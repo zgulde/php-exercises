@@ -7,8 +7,12 @@ class User extends Model
     protected static $table = 'national_parks';
 }
 
-$u = User::find('4');
+$newPark = new User();
 
-$u->name = 'Not So Badlands';
+$newPark->name = 'another park!';
+$newPark->location = 'atlantis';
+$newPark->date_established = '1990-12-12';
+$newPark->area_in_acres = '123.01';
+$newPark->description = 'underwater';
 
-$u->save();
+$newPark->save();
