@@ -1,6 +1,6 @@
 <?php
 
-class Model {
+abstract class Model {
 
     protected static $dbc;
     protected static $table;
@@ -56,16 +56,17 @@ class Model {
 
         if ($this->id != '') {
             // there is an id key, so we need to update
+
             // remove the id so it is not part of the update query
             // add it back later
             $id = $this->id;
             unset($this->attributes['id']);
 
-            $updateStmt = [];
             $columns = array_keys($this->attributes);
-            foreach ($columns as $key) {
-                $updateStmt[] = "$key = :$key";
-            }
+
+            $updateStmt = array_map(function($key){
+                return "$key = :$key";
+            }, $columns);
 
             $updateStmt = implode(', ', $updateStmt);
 
@@ -80,20 +81,20 @@ class Model {
             $this->attributes['id'] = $id;
 
         } else {
-
             // no id, so we need to insert
+
             // without manually sorting the array, mysql does some sort of
             // sorting that screws up the order of the values inserted
             asort($this->attributes);
 
             $columns = array_keys($this->attributes);
-            $paramatizedValues = [];
-            foreach ($columns as $column) {
-                $paramatizedValues[] = ":$column";
-            }
 
-            $columnNames = implode(', ', $columns);
+            $paramatizedValues = array_map(function($col){
+                return ":$col";
+            }, $columns);
+
             $paramatizedValues = implode(', ', $paramatizedValues);
+            $columnNames = implode(', ', $columns);
 
             $query = "INSERT INTO $table ($columnNames) VALUES ($paramatizedValues)";
             $stmt = static::$dbc->prepare($query);
@@ -103,14 +104,8 @@ class Model {
                 $stmt->bindValue(":$key", $value, PDO::PARAM_STR);
             }
 
-            // $stmt->execute();
+            $stmt->execute();
         }
-        // @TODO: Ensure there are attributes before attempting to save
-        // @TODO: Perform the proper action - if the `id` is set, this is an update, if not it is a insert
-        // @TODO: Ensure that update is properly handled with the id key
-        // @TODO: After insert, add the id back to the attributes array so the object can properly reflect the id
-        // @TODO: You will need to iterate through all the attributes to build the prepared query
-        // @TODO: Use prepared statements to ensure data security
     }
 
     /*
@@ -118,11 +113,8 @@ class Model {
      */
     public static function find($id)
     {
-        // Get connection to the database
         self::dbConnect();
 
-        // @TODO: Create select statement using prepared statements
-        
         $table = static::$table;
 
         $query = "SELECT * from {$table} WHERE id = :id";
@@ -131,15 +123,8 @@ class Model {
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        
-
-        // @TODO: Store the resultset in a variable named $result
-
-        // The following code will set the attributes on the calling object based on the result variable's contents
-
         $instance = null;
-        if ($result)
-        {
+        if ($result) {
             $instance = new static;
             $instance->attributes = $result;
         }
@@ -153,7 +138,6 @@ class Model {
     {
         self::dbConnect();
 
-        // @TODO: Learning from the previous method, return all the matching records
         $table = static::$table;
         $myQuery = "SELECT * FROM $table";
 
@@ -161,8 +145,7 @@ class Model {
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $instance = null;
-        if ($result)
-        {
+        if ($result) {
             $instance = new static;
             $instance->attributes = $result;
         }
@@ -175,6 +158,15 @@ class Model {
         $table = static::$table;
         $query = "DELETE FROM $table WHERE id=$id";
         self::$dbc->query($query);
+    }
+
+    public function doStuff()
+    {
+        echo 'Doing stuff...' . PHP_EOL;
+        sleep(1);
+        echo 'Working...' . PHP_EOL;
+        sleep(2);
+        echo 'Done!' . PHP_EOL;
     }
 
 }

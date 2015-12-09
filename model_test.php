@@ -7,12 +7,17 @@ class ParksUser extends Model
     protected static $table = 'national_parks';
 }
 
-$user = 'ParksUser';
 
+$user = 'ParksUser';
 $park = new $user;
 
+$park->name = 'Atlantis12345';
+$park->area_in_acres = '12345';
+$park->date_established = '1970-01-01';
+$park->location = 'Unknown';
+$park->description = 'Underwater City';
+$park->save();
 
-// $park = ParksUser::find(7);
 
 // echo PHP_EOL;
 // echo 'Name: ' . $park->name . PHP_EOL;

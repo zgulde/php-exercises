@@ -4,4 +4,4 @@ define('DB_NAME', 'parks_db');
 define('DB_USER', 'parks_user');
 define('DB_PASS', 'codeup');
 
-require_once 'db_connect.php';
+require 'db_connect.php';
