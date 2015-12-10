@@ -1,5 +1,19 @@
 $(document).ready(function(){
 
+    function formatDate(date){
+
+        //get rid of anything that is not a number
+        date = date.replace(/[^\d]/g,'');
+
+        if (date.length > 6) {
+            return date.slice(0,4) + '-' + date.slice(4,6) + '-' + date.slice(6,8);
+        } else if (date.length > 4) {
+            return date.slice(0,4) + '-' + date.slice(4);
+        }
+
+        return date;
+    }
+
     if (currentPage >= maxNumPages) {
         $('#next').attr('disabled','disabled');
     } else if (currentPage <= 0){
@@ -22,6 +36,21 @@ $(document).ready(function(){
 
     $('#limit').change(function(){
         $('#form').submit();
+    });
+
+    $('#date-estb').on('input', function(){
+        $(this).val(formatDate($(this).val()));
+    });
+
+    $('#area').on('input', function(){
+        $(this).val($(this).val().replace(/[^\d\.]/g, ''));
+    });
+
+    $('#clear-form').click(function(){
+        $('.insert-form input').each(function(){
+            $(this).removeClass('invalid');
+        });
+        $('.insert-form textarea').removeClass('invalid');
     });
 
     $('#add-park-form').submit(function(e){
@@ -66,6 +95,8 @@ $(document).ready(function(){
             $description.addClass('invalid');
             e.preventDefault();
         }
+
+
 
     });
 

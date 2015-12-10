@@ -71,6 +71,7 @@ class Input
 
         return (int) $number;
     }
+    
     /**
      * returns a DateTime object created from the request key if the request key
      * can be converted to a valid date
@@ -80,6 +81,7 @@ class Input
     public static function getDate($key)
     {
         $date = self::get($key);
+
         if (strtotime($date)) {
             return new DateTime($date);
         }

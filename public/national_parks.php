@@ -94,6 +94,8 @@ if(!empty($_POST)){
     <link rel="icon" type="image/png" href="/img/favicon.ico">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/parks.css">
     <link href='https://fonts.googleapis.com/css?family=PT+Sans:400,700|PT+Serif:400,700' rel='stylesheet' type='text/css'>
 </head>
@@ -125,7 +127,7 @@ if(!empty($_POST)){
             <?php foreach ($parksResults as $park): ?>
                 <tr>
                     <?php foreach ($park as $item): ?>
-                        <td><?= $item; ?></td>
+                        <td><?= escape($item); ?></td>
                     <?php endforeach; ?>
                 </tr>
             <?php endforeach; ?>
@@ -144,47 +146,60 @@ if(!empty($_POST)){
         </form>
     </div>
 
-    <div class="insert-form container">
-        <h2>Add a Park!</h2>
-        <form action='national_parks.php' method="post" id='add-park-form'>
-            <label for="name">Name: 
-                <input id='name' type="text" name='name' pattern=".+(\s.+)*" title="name of the park" required>
-                <p>Name of the Park</p>
-            </label>
-            <label for="location">Location: 
-                <input id='location' type="text" name='location' pattern=".+(\s.+)*" title="location of the park" required>
-                <p>Where the park is located</p>
-            </label>
-            <label for="date-estb">Date Established: 
-                <input id='date-estb' type="text" name='date-estb' pattern="\d{4}-\d{2}-\d{2}" title="date in YYYY-MM-DD format" required>
-                <p>YYYY-MM-DD</p>
-            </label>
-            <label for="area">Area: 
-                <input id='area' type="text" name='area' pattern="\d+" title="area in acres" required>
-                <p>in acres</p>
-            </label>
-            <br>
-            <label for="description">Description: 
-                <textarea id='description' type="text" name='description'></textarea>
-                <p>park description</p>
-            </label>
-            <br>
-            <input class='submit-btn' type="submit">
-        </form>
+    <h2>Add A Park!</h2>
+    <br>
+    <button class="submit-btn" data-toggle="modal" data-target="#add-park-modal">Add A Park!</button>
+
+<div class="modal fade" id="add-park-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form action='national_parks.php' method="post" id='add-park-form' class="insert-form">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Enter Park Information</h4>
+                </div>
+                <div class="modal-body">
+                        <label for="name">Name: 
+                            <input id='name' type="text" name='name'>
+                            <p>Name of the Park</p>
+                        </label>
+                        <label for="location">Location: 
+                            <input id='location' type="text" name='location'>
+                            <p>Where the park is located</p>
+                        </label>
+                        <label for="date-estb">Date Established: 
+                            <input id='date-estb' type="text" name='date-estb'>
+                            <p>YYYY-MM-DD</p>
+                        </label>
+                        <label for="area">Area: 
+                            <input id='area' type="text" name='area'>
+                            <p>in acres</p>
+                        </label>
+                        <br>
+                        <label for="description">Description: 
+                            <textarea id='description' type="text" name='description'></textarea>
+                            <p>park description</p>
+                        </label>
+                        <br>
+                </div>
+                <div class="modal-footer">
+                    <input id="clear-form" type="reset" class="submit-btn pull-left" value="Clear">
+                    <button type="button" class="submit-btn red" data-dismiss="modal">Close</button>
+                    <input class='submit-btn' type="submit">
+                </div>
+            </form>
+        </div>
     </div>
+</div>
 
     <?php include 'footer.php'; ?>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>    
-
-</body>
-</html>
-
-<?php 
-    /* <script>
+    <script>
         var limit = <?= $limit;?>;
         var currentPage = <?= $p; ?>;
         var maxNumPages = <?= $maxNumPages;?>;
     </script>
-    <script src=/js/parks.js></script> */
- ?>
+    <script src=/js/parks.js></script>
+
+</body>
+</html>
