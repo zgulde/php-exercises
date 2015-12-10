@@ -22,7 +22,7 @@ class Input
      */
     public static function get($key, $default = null)
     {
-        return self::has($key) ? $_REQUEST[$key] : $default ;
+        return self::has($key) ? trim($_REQUEST[$key]) : $default ;
     }
 
     /**
@@ -33,6 +33,59 @@ class Input
     public static function escape($string)
     {
         return htmlspecialchars(strip_tags($string));
+    }
+
+    /**
+     * checks to see if the request has the $key and if the key contains at
+     * least one character that is not whitespace
+     * @param  [string] $key [the key we are looking for]
+     * @return [string]      [the string in the $key]
+     */
+    public static function getString($key)
+    {
+        $string = self::get($key);
+        if (preg_match('/[^\s]/', $string)) {
+            return $string;
+        } else {
+            throw new Exception('There is not a string here.');
+        }
+    }
+
+    /**
+     * return the request key that is passed casted to an int or a float, respectively
+     * if there is something that is not a digit in the input, throws an error
+     * @param  string $key key to look for
+     * @return int/float      
+     */
+    public static function getNumber($key)
+    {
+        $number = self::get($key);
+
+        if (preg_match('/[^\d\.]/', $number)) {
+            throw new Exception('Error: expecting a number but found something that isn\'t a number');
+        }
+
+        if (preg_match('/\./', $number)) {
+            return (float) $number;
+        }
+
+        return (int) $number;
+    }
+    /**
+     * returns a DateTime object created from the request key if the request key
+     * can be converted to a valid date
+     * @param  string $key request key
+     * @return DateTime      a DateTime object
+     */
+    public static function getDate($key)
+    {
+        $date = self::get($key);
+        if (strtotime($date)) {
+            return new DateTime($date);
+        }
+
+        throw new Exception('Invalid Date Format!');
+        
     }
 
     ///////////////////////////////////////////////////////////////////////////
