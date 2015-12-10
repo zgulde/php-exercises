@@ -1,5 +1,6 @@
 <?php 
 require_once '../parks_dbc.php';
+require_once '../lib/Input.php';
 
 function getQueryResults($dbc, $query)
 {
@@ -13,18 +14,33 @@ function escape($string)
 
 function postHandler($dbc)
 {
-    $park = $_POST;
+
+    try {
+
+        $name = Input::getString('name');
+        $location = Input::getString('location');
+        $area = Input::getNumber('area');
+        $description = Input::getString('description');
+        $date = Input::getDate('date-estb');
+
+        $date = $date->format('Y-m-d');
+
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        // header("Refresh:0");
+        exit();
+    }
 
     $query  = 'INSERT INTO national_parks (name, location, date_established, area_in_acres, description) ';
     $query .= 'VALUES (:name, :location, :date, :area, :description)';
 
     $stmt = $dbc->prepare($query);
 
-    $stmt->bindValue(':name', $park['name'], PDO::PARAM_STR);
-    $stmt->bindValue(':location', $park['location'], PDO::PARAM_STR);
-    $stmt->bindValue(':date', $park['date-estb'], PDO::PARAM_STR);
-    $stmt->bindValue(':area', $park['area'], PDO::PARAM_STR);
-    $stmt->bindValue(':description', $park['description'], PDO::PARAM_STR);
+    $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+    $stmt->bindValue(':location', $location, PDO::PARAM_STR);
+    $stmt->bindValue(':date', $date, PDO::PARAM_STR);
+    $stmt->bindValue(':area', $area, PDO::PARAM_STR);
+    $stmt->bindValue(':description', $description, PDO::PARAM_STR);
 
     $stmt->execute();
 
@@ -70,6 +86,10 @@ function pageController($dbc)
         $park['Date Established'] = date("F d, Y", $date);
     }
 
+    // $parksResults = array_map(function($park){
+    //     $park['Date Established'] = 
+    // }, $parksResults);
+
     return [
         'parksResults' => $parksResults,
         'p' => $p,
@@ -96,6 +116,7 @@ if(!empty($_POST)){
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="/js/moment.js"></script>
     <link rel="stylesheet" href="css/parks.css">
     <link href='https://fonts.googleapis.com/css?family=PT+Sans:400,700|PT+Serif:400,700' rel='stylesheet' type='text/css'>
 </head>
@@ -156,31 +177,35 @@ if(!empty($_POST)){
             <form action='national_parks.php' method="post" id='add-park-form' class="insert-form">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Enter Park Information</h4>
+                    <h2 class="modal-title" id="myModalLabel">Enter Park Information</h2>
                 </div>
                 <div class="modal-body">
-                        <label for="name">Name: 
-                            <input id='name' type="text" name='name'>
-                            <p>Name of the Park</p>
-                        </label>
-                        <label for="location">Location: 
-                            <input id='location' type="text" name='location'>
-                            <p>Where the park is located</p>
-                        </label>
-                        <label for="date-estb">Date Established: 
-                            <input id='date-estb' type="text" name='date-estb'>
-                            <p>YYYY-MM-DD</p>
-                        </label>
-                        <label for="area">Area: 
-                            <input id='area' type="text" name='area'>
-                            <p>in acres</p>
-                        </label>
+                        <div class="form-group">
+                            <label for="name">Name: </label>
+                            <input id='name' type="text" name='name' class="form-control">
+                            <p class="help-block">Name of the Park</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="location">Location: </label>
+                            <input id='location' type="text" name='location' class="form-control">
+                            <p class="help-block">Where the park is located</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="date-estb">Date Established: </label>
+                            <input id='date-estb' type="text" name='date-estb' class="form-control">
+                            <p class="help-block">&nbsp;</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="area">Area: </label>
+                            <input id='area' type="text" name='area' class="form-control">
+                            <p class="help-block">in acres</p>
+                        </div>
                         <br>
-                        <label for="description">Description: 
+                        <div class="form-group">
+                        <label for="description">Description: </label>
                             <textarea id='description' type="text" name='description'></textarea>
-                            <p>park description</p>
-                        </label>
-                        <br>
+                            <p class="help-block">park description</p>
+                        </div>
                 </div>
                 <div class="modal-footer">
                     <input id="clear-form" type="reset" class="submit-btn pull-left" value="Clear">

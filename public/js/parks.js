@@ -1,19 +1,5 @@
 $(document).ready(function(){
 
-    function formatDate(date){
-
-        //get rid of anything that is not a number
-        date = date.replace(/[^\d]/g,'');
-
-        if (date.length > 6) {
-            return date.slice(0,4) + '-' + date.slice(4,6) + '-' + date.slice(6,8);
-        } else if (date.length > 4) {
-            return date.slice(0,4) + '-' + date.slice(4);
-        }
-
-        return date;
-    }
-
     if (currentPage >= maxNumPages) {
         $('#next').attr('disabled','disabled');
     } else if (currentPage <= 0){
@@ -36,10 +22,6 @@ $(document).ready(function(){
 
     $('#limit').change(function(){
         $('#form').submit();
-    });
-
-    $('#date-estb').on('input', function(){
-        $(this).val(formatDate($(this).val()));
     });
 
     $('#area').on('input', function(){
@@ -67,7 +49,6 @@ $(document).ready(function(){
 
         var validName = /^[a-zA-Z]{2,}$/;
         var validLocation = /^[a-zA-Z][a-zA-Z\d]+(\s*[a-zA-Z,\d])*$/;
-        var validDate = /^[12]\d\d\d-[01]\d-[0-3]\d$/;
         var validArea = /^\d+(\.\d+)?$/;
         var validDescription = /^.+(\s*.+)*$/;
 
@@ -81,11 +62,6 @@ $(document).ready(function(){
             e.preventDefault();
         }
         
-        if ( !validDate.test($date.val() ) ){
-            $date.addClass('invalid');
-            e.preventDefault();
-        }
-        
         if ( !validArea.test($area.val() ) ){
             $area.addClass('invalid');
             e.preventDefault();
@@ -96,7 +72,16 @@ $(document).ready(function(){
             e.preventDefault();
         }
 
+        var formattedDate = moment($date.val()).format('YYYY-MM-DD');
 
+        if (formattedDate == 'Invalid date') {
+            e.preventDefault();
+            $date.val('Could not parse date!');
+            $date.addClass('invalid');
+            $date.focus();
+        } else {
+            $date.val(formattedDate);
+        }
 
     });
 

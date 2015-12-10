@@ -44,7 +44,7 @@ class Input
     public static function getString($key)
     {
         $string = self::get($key);
-        if (preg_match('/[^\s]/', $string)) {
+        if ( is_string($string) ) {
             return $string;
         } else {
             throw new Exception('There is not a string here.');
@@ -61,8 +61,17 @@ class Input
     {
         $number = self::get($key);
 
+        if(empty($number)){
+            throw new Exception('Nothing Here!');
+            
+        }
+
         if (preg_match('/[^\d\.]/', $number)) {
-            throw new Exception('Error: expecting a number but found something that isn\'t a number');
+            throw new Exception('Error: expecting a number but found something that isn\'t a digit or a decimal point');
+        }
+
+        if (preg_match('/.*\..*\./', $number)) {
+            throw new Exception('Error: multiple decimal points found!');
         }
 
         if (preg_match('/\./', $number)) {
@@ -71,7 +80,7 @@ class Input
 
         return (int) $number;
     }
-    
+
     /**
      * returns a DateTime object created from the request key if the request key
      * can be converted to a valid date
