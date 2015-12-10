@@ -130,6 +130,7 @@ if(!empty($_POST)){
                 </tr>
             <?php endforeach; ?>
     </table>
+
     <div class="delete">
         <h2>Delete a Park!</h2>
         <form method='post' action='delete_park.php'>
@@ -142,23 +143,24 @@ if(!empty($_POST)){
             <input class='submit-btn' type="submit">
         </form>
     </div>
+
     <div class="insert-form container">
         <h2>Add a Park!</h2>
         <form action='national_parks.php' method="post" id='add-park-form'>
             <label for="name">Name: 
-                <input id='name' type="text" name='name'>
+                <input id='name' type="text" name='name' pattern=".+(\s.+)*" title="name of the park" required>
                 <p>Name of the Park</p>
             </label>
             <label for="location">Location: 
-                <input id='location' type="text" name='location'>
+                <input id='location' type="text" name='location' pattern=".+(\s.+)*" title="location of the park" required>
                 <p>Where the park is located</p>
             </label>
             <label for="date-estb">Date Established: 
-                <input id='date-estb' type="text" name='date-estb'>
+                <input id='date-estb' type="text" name='date-estb' pattern="\d{4}-\d{2}-\d{2}" title="date in YYYY-MM-DD format" required>
                 <p>YYYY-MM-DD</p>
             </label>
             <label for="area">Area: 
-                <input id='area' type="text" name='area'>
+                <input id='area' type="text" name='area' pattern="\d+" title="area in acres" required>
                 <p>in acres</p>
             </label>
             <br>
@@ -170,14 +172,19 @@ if(!empty($_POST)){
             <input class='submit-btn' type="submit">
         </form>
     </div>
+
     <?php include 'footer.php'; ?>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>    
-    <script>
+
+</body>
+</html>
+
+<?php 
+    /* <script>
         var limit = <?= $limit;?>;
         var currentPage = <?= $p; ?>;
         var maxNumPages = <?= $maxNumPages;?>;
     </script>
-    <script src=/js/parks.js></script>
-</body>
-</html>
+    <script src=/js/parks.js></script> */
+ ?>
